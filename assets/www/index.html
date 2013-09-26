@@ -1,0 +1,115 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title></title>
+
+	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no" />
+	
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+	<link rel="stylesheet" href="styleiOS.css" type="text/css" media="screen" title="no title" charset="utf-8">
+
+	<script type="text/javascript" charset="utf-8" src="cordova-1.5.0.js"></script>
+	<script type="text/javascript" charset="utf-8" src="main.js"></script>
+	
+</head>
+<body onload="init();" >
+
+<div id="container">
+<div id="header">
+<h1><a href="#"><img src=icon.png height=16px> Horarios</a></h1>
+		
+		<div id="eldivmenu" style="position:absolute; right:5px; top:7px;  z-index:1; ">
+		<a href=# onclick="irapantalla(1);return false;"><img src=star.png height=25></a> &nbsp; 
+		<a href=# onclick="irapantalla(2);return false;"><img src=search.png height=25></a> &nbsp; 
+		<a href=# onclick="irapantalla(3);return false;"><img src=settings.png height=25></a> &nbsp; 
+		<a href=# onclick="irapantalla(4);return false;"><img src=info.png height=25></a> &nbsp; 
+		</div>
+
+<div id="utility"></div>
+<div id="nav"></div>
+
+	<!-- ------------------------------------------------------------------- -->
+	<div id="divC1" style="padding:10px 10px;">
+		<b>Paradas más consultadas</b>
+		
+		<BR><BR>
+		
+		<table border=0><tr>
+		<td align=left>
+		Parada: &nbsp; <input type="text" name="parada" id="parada" maxlength="4" size="12" style="color: #000000; font-size: 120%;">
+		</td> 
+		<td align=left>
+		<input type=button value="A&ntilde;adir favorito" onClick=" favoritos(); return false; " style="color: #000000; font-weight: bold; font-size: 120%;">
+		<input type=button value="Consultar" onClick=" irapantalla(2); mostrar(1); return false; " style="color: #000000; font-weight: bold; font-size: 120%;">
+		</td>
+		</tr></table>
+		
+		<BR><HR>
+		<div id="listaFavoritos"> </div>
+		<BR><HR>
+	</div>
+
+
+	<!-- ------------------------------------------------------------------- -->
+	<div style="padding:10px 10px; visibility:none" id="divC2">
+		<b>Consulta de horarios</b>
+		
+		<BR><BR>
+		
+		<table border=0><tr>
+		<td align=left>
+		Parada: &nbsp; <input type="text" name="parada2" id="parada2" maxlength="4" size="12" style="color: #000000; font-size: 120%;">
+		</td>
+		<td align=left>
+		<input type=button value="Consultar" onClick=" mostrar(2); return false; " style="color: #000000; font-weight: bold; font-size: 120%;">  <!-- llamamos desde la p2 directamente -->
+		</td>
+		</tr></table>
+		
+		<BR><HR>
+		<div id="tablaExtraida"> </div>
+		<BR><HR>
+	</div>
+	
+	
+	<!-- ------------------------------------------------------------------- -->
+	<div data-role="content" style="padding:10px 10px; visibility:none" id="divC3">
+		<b>Borrar los favoritos</b>
+				
+		<p>Esta opción borrará todos los datos relativos a favoritos almacenados por la aplicación.</p>
+		<p>Se debe usar con cuidado ya que se eliminan permanentemente y no se pueden recuperar.</p>
+		
+		<BR><BR>
+		
+		<input type=button value="Borrar favoritos" onClick=" borrarFavoritos(); return false; " style="color: #000000; font-weight: bold; font-size: 120%;"> 
+		
+	</div>
+
+
+	<!-- ------------------------------------------------------------------- -->
+	<div data-role="content" style="padding:10px 10px; visibility:none" id="divC4">
+		<b>Información</b>
+		<p>Aplicación para consultar los horarios de autobuses de Transportes Rober en Granada.</p>
+		<p>Al entrar en la aplicación, se nos muestra la lista de favoritos almacenada previamente. De esta forma se nos facilita el acceso a los horarios de paradas que normalmente consultamos. En cualquier momento podemos volver a esta pantalla pulsando el icono <img src=star.png width=16> </p>
+		<p>Al pulsar sobre un favorito, vamos a la segunda pantalla (búsqueda) y se realiza la consulta a ese número de parada ya almacenado. En cualquier momento podemos volver a esta pantalla pulsando el icono <img src=search.png width=16> </p>
+		<p>Tanto desde la primera pantalla como desde la segunda podemos hacer una consulta directa tecleando el número de parada y pulsando en el botón de "Consultar".
+		<p>La última opción <img src=info.png width=16> muestra información acerda de la aplicación y ayuda sobre su uso. </p>
+		<p><HR></p>
+		<p>La aplicación necesita conexión a internet para obtener la información.</p>
+        <p>Toda la información se extrae directamente de la web pública de Transportes Rober:<BR> &nbsp; &nbsp; http://www.transportesrober.com/ </p>
+        <p><i><b>EXENCIÓN DE RESPONSABILIDAD:</b> Esta aplicación se distribuye con la intención de proporcionar una herramienta útil, pero sin ningún tipo de garantía, ni siquiera la garantía implícita de comercialización o idoneidad para un propósito particular. No se trata de una aplicación oficial de Transportes Rober, sino que sirve los datos a los que cualquiera puede acceder en la web anterior. Por favor, úsala bajo tu propia responsabilidad.</i></p>
+	</div>
+
+</div>
+
+<div id="info"></div>
+<div id="content"></div>
+<div id="sidebar"></div>
+<div id="footer"></div>
+	
+</div>
+
+<br/><br/><br/>
+
+</body>
+</html>
+
