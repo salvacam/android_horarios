@@ -1,9 +1,6 @@
-android_horarios
-================
+<h3>indexedDB con cordova</h3>
 
-Aplicación de consulta de los horarios de autobuses de Transportes Rober en Granada.
+Prueba de indexedDB con cordova para android 4.1.1
 
-Se trata de una aplicación muy sencilla basada en PhoneGap-Cordova.
-
-Está preparada para importarla con Eclipse a partir de una carpeta con el código del repositorio.
-
+Uso el plugin 
+<a href="https://github.com/MSOpenTech/cordova-plugin-indexedDB">Cordova plugin for IndexedDB </a>
