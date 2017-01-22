@@ -1,4 +1,4 @@
-var cacheName = 'horarios-v0.9.1';
+var cacheName = 'horarios-v0.9.2';
 
 var filesToCache = [
   '/',
