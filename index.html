@@ -1,0 +1,88 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Horarios</title>
+
+	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no" />
+
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+
+  <meta name="theme-color" content="#CCC">
+  <link rel="icon" href="/img/icon.png">
+
+    <link rel="manifest" href="./manifest.json">
+
+	<link rel="stylesheet" href="css/style.min.css">
+	<link rel="icon" href="img/icon.png">
+
+</head>
+<body>
+
+	<header>
+		<h3><img src="img/icon.png" alt="icon" height="24"> Horarios</h3>
+	</header>
+
+	<div class="container principal jumbotron">
+
+		<div id="consulta">
+			<input type="number" name="parada" id="parada" placeholder="Parada" maxlength="4" size="12" style="color: #000000; font-size: 120%;" value="">
+			<i class="fa fa-plus btn btn-default btn-lg" id="botonAdd" aria-hidden="true"></i>
+			<i class="fa fa-search btn btn-default btn-lg" id="botonConsulta" aria-hidden="true"></i>
+		</div>
+
+		<div id="conter-descripcion" class="hide">
+			<input type="text" name="descripcion" id="descripcion" placeholder="Descripcion de la Parada" size="20" style="color: #000000; font-size: 115%;">
+			<i class="fa fa-undo btn btn-default btn-lg" id="cancelar" aria-hidden="true"></i>
+			<i class="fa fa-check btn btn-default btn-lg" id="guardar" aria-hidden="true"></i>
+		</div>
+
+		<div class="clear"></div>
+		<div id="cargando" class="hide"><i class="fa fa-circle-o-notch fa-spin fa-4x" aria-hidden="true"></i></div>		
+		<div class="clear"></div>
+		<div id="operacion">
+		</div>
+
+		
+		<div id="resultado" class="hide">
+			<span id="hora"></span>
+			<i class="fa fa-eraser btn btn-default btn-lg" id="limpiar" aria-hidden="true"></i>
+			<div class="clear"></div>
+			<table class="table table-striped table-bordered text-center">
+				<thead id="cabeceraTabla" class="hide">
+					<tr>
+						<th class="text-center">Línea</th>
+						<th class="text-center">Destino</th>
+						<th class="text-center">LLegada</th>
+					</tr>
+				</thead>
+				<tbody id="tablaResultado">
+					<!--
+					<tr>
+						<td>S1</td>
+						<td>AAA5</td>
+						<td>5</td>
+					</tr>
+					<tr>
+						<td>S1</td>
+						<td>AAA5</td>
+						<td>5</td>
+					</tr>
+					<tr>
+						<td>S1</td>
+						<td>AAA5</td>
+						<td>5</td>
+					</tr>
+				-->
+				</tbody>
+			</table>
+		</div>
+
+
+		
+		<div id="lista-favoritos" class="container"></div>
+	</div>
+
+	<script type="text/javascript" charset="utf-8" src="js/main.min.js"></script>
+</body>
+</html>
