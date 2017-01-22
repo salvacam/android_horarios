@@ -38,6 +38,7 @@ var app = {
     app.mostrarFavoritos();
 
     //TODO cargar serviceWorker
+    //alert('service worker');
     
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker
@@ -51,17 +52,19 @@ var app = {
   },
 
   mostrarFavorito: function(e) {
-    console.log(e);
+    //console.log(e);
     document.getElementById("parada").value = e.target.getAttribute('data-id');
     app.mostrar();
   },
 
   mostrar: function() {
+    //alert('mostrar');
     app.cancelAdd();
     var numparada = document.getElementById("parada").value;
+    //alert(numparada);
     if (numparada === "") {
       //TODO poner mensaje "debes introducir un número de parada"
-      console.log("debes introducir un número de parada");
+      //console.log("debes introducir un número de parada");
       return;
     }
 
@@ -72,10 +75,9 @@ var app = {
     cargando.classList.toggle('hide');
 
     var url = app.URL_SERVER + numparada;
+    console.log(url);
 
-    var xhr = new XMLHttpRequest({mozSystem: true});
-    
-
+    var xhr = new XMLHttpRequest();
     
     xhr.open ("GET", url, true);
     //xhr.setRequestHeader('User-Agent', "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:50.0) Gecko/20100101 Firefox/50.0");
