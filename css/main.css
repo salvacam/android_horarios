@@ -51,6 +51,10 @@ header ul li a {
 
 /* quitar hacia arriba */
 
+body {
+  min-width: 320px;
+}
+
 .jumbotron {
   background-color: white;
 }
