@@ -70,7 +70,7 @@ var app = {
 
     //Desactivar boton consultar y quitar evento
     app.botonConsulta.classList.toggle('disabled');
-    document.querySelector('.parada').classList.toggle('disabled');
+    //document.querySelector('.parada').classList.toggle('disabled');
     app.botonConsulta.removeEventListener('click', app.mostrar);
 
     cargando.classList.toggle('hide');
@@ -102,7 +102,7 @@ var app = {
     app.botonConsulta.addEventListener('click', app.mostrar);
 
     app.cargando.classList.toggle('hide');
-    document.querySelector('.parada').classList.toggle('disabled');
+    //document.querySelector('.parada').classList.toggle('disabled');
 
     if (data.hasOwnProperty("error")){
       operacion.textContent = data.error;
