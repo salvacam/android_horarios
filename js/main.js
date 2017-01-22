@@ -7,7 +7,7 @@ var app = {
   //URL_SERVER: 'index.php?parada=',
   //URL_SERVER: 'http://192.168.1.133/horarios/_index.php?parada=',
   //URL_SERVER: 'http://transportesrober.com:9055/websae/Transportes/parada.aspx?idparada=',
-  URL_SERVER: 'http://salvacam.net78.net/horarios/index.php?parada=',
+  URL_SERVER: 'https://salvacam.net78.net/horarios/index.php?parada=',
   //
   conterDescripcion: document.getElementById("conter-descripcion"),
   cancelar: document.getElementById('cancelar'),
