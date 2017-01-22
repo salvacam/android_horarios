@@ -58,10 +58,8 @@ var app = {
   },
 
   mostrar: function() {
-    alert('mostrar');
     app.cancelAdd();
     var numparada = document.getElementById("parada").value;
-    alert(numparada);
     if (numparada === "") {
       //TODO poner mensaje "debes introducir un número de parada"
       //console.log("debes introducir un número de parada");
@@ -77,27 +75,25 @@ var app = {
 
     var url = app.URL_SERVER + numparada;
     console.log(url);
-    alert(url);
+    
 
     var xhr = new XMLHttpRequest();
     
     xhr.open ("GET", url, true);
     xhr.onreadystatechange = function () {
       if (xhr.readyState == 4) {
-        alert(xhr.responseText);
+        console.log(xhr);
         if (xhr.responseText) {
           var data = JSON.parse(xhr.responseText);
-          alert(data);
           app.renderResult(data, numparada);
         }        
       }
     };
     xhr.send(null);
-    alert(xhr);
   },
 
   renderResult: function(data, numparada) {
-    alert('renderResult');
+    //alert('renderResult');
     app.botonConsulta.classList.toggle('disabled');
     app.botonConsulta.addEventListener('click', app.mostrar);
 

@@ -1,4 +1,4 @@
-var cacheName = 'horarios-v0.9.2';
+var cacheName = 'horarios-v0.9.1116';
 
 var filesToCache = [
   '/',
@@ -19,7 +19,7 @@ var filesToCache = [
   'fonts/fontawesome-webfont.woff',
   'fonts/fontawesome-webfont.woff2',
   
-  'img/icon.png'  
+  'img/icon.png'
 ];
 
 self.addEventListener('install', function(e) {
@@ -40,19 +40,30 @@ self.addEventListener('activate', function(e) {
         if (key.startsWith('horarios-')){
           if (key !== cacheName) {
             console.log('[ServiceWorker] Removing old cache', key);
-            return caches.delete(key);  
-          }          
+            return caches.delete(key);
+          }
         }
       }));
     })
   );
 });
 
+self.addEventListener('fetch', function(event) {
+  event.respondWith(caches.match(event.request).then(function(response){
+      if(response)
+        return response;
+      return fetch(event.request).then(function(response){
+        return response;
+      });
+  }));
+});
+/*
 self.addEventListener('fetch', function(e) {
-  //console.log('[ServiceWorker] Fetch', e.request.url);
+  console.log('[ServiceWorker] Fetch', e.request.url);
   e.respondWith(
     caches.match(e.request).then(function(response) {
       return response || fetch(e.request);
     })
   );
 });
+*/
