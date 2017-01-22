@@ -58,10 +58,10 @@ var app = {
   },
 
   mostrar: function() {
-    //alert('mostrar');
+    alert('mostrar');
     app.cancelAdd();
     var numparada = document.getElementById("parada").value;
-    //alert(numparada);
+    alert(numparada);
     if (numparada === "") {
       //TODO poner mensaje "debes introducir un número de parada"
       //console.log("debes introducir un número de parada");
@@ -70,44 +70,39 @@ var app = {
 
     //Desactivar boton consultar y quitar evento
     app.botonConsulta.classList.toggle('disabled');
+    document.querySelector('.parada').classList.toggle('disabled');
     app.botonConsulta.removeEventListener('click', app.mostrar);
 
     cargando.classList.toggle('hide');
 
     var url = app.URL_SERVER + numparada;
     console.log(url);
+    alert(url);
 
     var xhr = new XMLHttpRequest();
     
     xhr.open ("GET", url, true);
-    //xhr.setRequestHeader('User-Agent', "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:50.0) Gecko/20100101 Firefox/50.0");
     xhr.onreadystatechange = function () {
       if (xhr.readyState == 4) {
-        /*
-        console.log(xhr);
-        console.log(xhr.responseText);
         alert(xhr.responseText);
-
-        app.botonConsulta.classList.toggle('disabled');
-        app.botonConsulta.addEventListener('click', app.mostrar);
-
-        app.cargando.classList.toggle('hide');
-
-        //alert(xhr.responseText);
-        */
-        var data = JSON.parse(xhr.responseText);
-        app.renderResult(data, numparada);
+        if (xhr.responseText) {
+          var data = JSON.parse(xhr.responseText);
+          alert(data);
+          app.renderResult(data, numparada);
+        }        
       }
     };
     xhr.send(null);
-
+    alert(xhr);
   },
 
   renderResult: function(data, numparada) {
+    alert('renderResult');
     app.botonConsulta.classList.toggle('disabled');
     app.botonConsulta.addEventListener('click', app.mostrar);
 
     app.cargando.classList.toggle('hide');
+    document.querySelector('.parada').classList.toggle('disabled');
 
     if (data.hasOwnProperty("error")){
       operacion.textContent = data.error;
