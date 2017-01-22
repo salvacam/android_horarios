@@ -1,9 +1,7 @@
-<h3>android_horarios</h3>
+<h3>Horario Bus Granada</h3>
 <hr/>
 
-Aplicación de consulta de los horarios de autobuses de Transportes Rober en Granada.
-
-Se trata de una aplicación muy sencilla basada en PhoneGap-Cordova.
+Aplicación para la consulta los horarios de las paradas de autobuses de Transportes Rober en Granada.
 
 <br/>
-<a href="http://salvacam.x10.mx/horarios.apk" target="_blank">Apk Android</a>
+<a href="http://salvacam.github.io/horario" target="_blank">Web</a>
