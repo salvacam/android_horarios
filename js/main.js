@@ -5,12 +5,9 @@ document.addEventListener('DOMContentLoaded', function () {
 var app = {
 
   //URL_SERVER: 'index.php?parada=',
-  //URL_SERVER: 'http://192.168.1.133/horarios/_index.php?parada=',
   //URL_SERVER: 'http://transportesrober.com:9055/websae/Transportes/parada.aspx?idparada=',
   URL_SERVER: 'https://featherbrained-exec.000webhostapp.com/horarios/index.php?parada=',
 
-  //
-  conterDescripcion: document.getElementById("conter-descripcion"),
   cancelar: document.getElementById('cancelar'),
   guardar: document.getElementById('guardar'),
 
@@ -37,69 +34,79 @@ var app = {
       app.todasParadas = JSON.parse(localStorage.getItem('_horarios_paradas'));
     }
     app.mostrarFavoritos();
-
-    //TODO cargar serviceWorker
-    //alert('service worker');
     
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker
         .register('service-worker.js')
-        .then(function() { 
+        .then(function() {
           //console.log('Service Worker Registered'); 
         });
     }
-
-     
   },
 
   mostrarFavorito: function(e) {
-    //console.log(e);
+
     document.getElementById("parada").value = e.target.getAttribute('data-id');
     app.mostrar();
   },
 
   mostrar: function() {
-    app.cancelAdd();
     var numparada = document.getElementById("parada").value;
     if (numparada === "") {
-      //TODO poner mensaje "debes introducir un número de parada"
-      //console.log("debes introducir un número de parada");
+      alertify.alert("Debes introducir un número de parada");
       return;
     }
 
     //Desactivar boton consultar y quitar evento
     app.botonConsulta.classList.toggle('disabled');
-    //document.querySelector('.parada').classList.toggle('disabled');
+    document.querySelector('.parada').classList.toggle('disabled');
     app.botonConsulta.removeEventListener('click', app.mostrar);
+    document.querySelector('.parada').removeEventListener('click', app.mostrarFavorito);
 
     cargando.classList.toggle('hide');
 
     var url = app.URL_SERVER + numparada;
-    console.log(url);
     
-
     var xhr = new XMLHttpRequest();
     
     xhr.open ("GET", url, true);
     xhr.onreadystatechange = function () {
       if (xhr.readyState == 4) {
-        console.log(xhr);
-        if (xhr.responseText) {
+        if (xhr.status == 200) {
           var data = JSON.parse(xhr.responseText);
           app.renderResult(data, numparada);
-        }        
+        } else {
+          app.fn_errorXHR();
+        }
       }
     };
-    xhr.send(null);
+
+    try{
+      xhr.send(null);
+    }catch(err){
+      app.fn_errorXHR();
+    }
+  },
+
+  fn_errorXHR: function() {
+    alertify.alert("Error al obtener los datos, compruebe su conexión");
+    app.botonConsulta.classList.toggle('disabled');
+    document.querySelector('.parada').classList.toggle('disabled');
+
+    app.botonConsulta.addEventListener('click', app.mostrar);
+    document.querySelector('.parada').addEventListener('click', app.mostrarFavorito);
+    
+    app.cargando.classList.toggle('hide');
   },
 
   renderResult: function(data, numparada) {
-    //alert('renderResult');
     app.botonConsulta.classList.toggle('disabled');
     app.botonConsulta.addEventListener('click', app.mostrar);
 
+    document.querySelector('.parada').classList.toggle('disabled');
+    document.querySelector('.parada').addEventListener('click', app.mostrarFavorito);
+
     app.cargando.classList.toggle('hide');
-    //document.querySelector('.parada').classList.toggle('disabled');
 
     if (data.hasOwnProperty("error")){
       operacion.textContent = data.error;
@@ -114,7 +121,7 @@ var app = {
     app.operacion.textContent = "";
 
     var fecha = new Date();
-    //hora.textContent = "Datos de la parada " + numparada + ", consultados a las "+fecha.getHours()+":"+
+
     app.hora.textContent = "Parada " + numparada + ", a las "+fecha.getHours()+":"+
         (fecha.getMinutes()<10?("0"+fecha.getMinutes()):fecha.getMinutes());
 
@@ -126,18 +133,23 @@ var app = {
     document.getElementById('resultado').className = "";
 
     document.getElementById('limpiar').removeEventListener('click', function(){});
+    document.getElementById('mostrar-tabla').removeEventListener('click', function(){});
+
     document.getElementById('limpiar').addEventListener('click', function(){
       document.getElementById('resultado').className = "hide";
+      document.getElementById("mostrar-tabla").className = '';
+    });
+    document.getElementById('mostrar-tabla').addEventListener('click', function(){
+      document.getElementById('resultado').className = "";
+      document.getElementById("mostrar-tabla").className = 'hide';
     });
 
     data.forEach(function(item) {
-      //console.log(item);
       var tr = (document.createElement('tr'));
       for(var x in item){
         var td = (document.createElement('td'));
         td.textContent = item[x];
         tr.appendChild(td);
-        //console.log(item[x]);
       }
 
       app.tablaResultado.appendChild(tr);
@@ -148,47 +160,37 @@ var app = {
     
     var numparada = document.getElementById("parada").value;
 
-    //Mostrar Input descripcion    
-    app.conterDescripcion.className = '';
-    
-    cancelar.addEventListener('click', app.cancelAdd);
-    
-    guardar.addEventListener('click', app.saveAdd);
-  },
+    if (!numparada || numparada === "") {
+      alertify.alert("Debes introducir un número de parada");
+      return;
+    }
 
-  cancelAdd: function() {
-    document.getElementById('descripcion').value = '';
-    app.conterDescripcion.className = 'hide';
-  },
+    alertify
+      .defaultValue("Descripcion de la parada")
+      .okBtn("Guardar")
+      .cancelBtn("Cancelar")
+      .prompt("Descripcion para la parada " + numparada +", máximo 20 caracteres",
+        function (val, ev) {
+          ev.preventDefault();
 
-  saveAdd: function(){
-    var numparada = document.getElementById("parada").value;
-    var valorDescription = document.getElementById('descripcion').value;
-    var item = {Order: 1, Number: numparada, Descripcion: valorDescription};
+          var item = {Order: 1, Number: numparada, Descripcion: val};
 
-    app.todasParadas.push(item);
+          app.todasParadas.push(item);
+          localStorage.setItem('_horarios_paradas', JSON.stringify(app.todasParadas));          
 
-    localStorage.setItem('_horarios_paradas', JSON.stringify(app.todasParadas));
-    
-    app.cancelAdd();
-
-    // Actualizar favoritos
-    app.mostrarFavoritos();
+          // Actualizar favoritos
+          app.mostrarFavoritos();
+        }
+      );
   },
 
   deleteAdd: function(e) {
-    app.cancelAdd();
     alertify
       .okBtn("Borrar")
       .cancelBtn("Cancelar")
       .confirm("Borrar la parada " + e.target.getAttribute('data-id') + " - " + 
       e.target.getAttribute('data-desc'), function (ev) {
-
-          // The click event is in the
-          // event variable, so you can use
-          // it here.
           ev.preventDefault();
-          //alertify.success("You've clicked OK");
           
           var paradasExistentes = app.todasParadas;
           app.todasParadas = [];
@@ -206,32 +208,9 @@ var app = {
           app.mostrarFavoritos();
       });
 
-
-/*
-    var confirmarBorrar = confirm("Borrar la parada " + e.target.getAttribute('data-id') + " - " + 
-      e.target.getAttribute('data-desc'));
-    if (confirmarBorrar) {
-      //localStorage.removeItem('_horarios_paradas');
-      var paradasExistentes = app.todasParadas;
-      app.todasParadas = [];
-      //recorrer el array 
-      for(var x in paradasExistentes) {
-        console.log(x);
-        if(paradasExistentes[x].Number != e.target.getAttribute('data-id') 
-            || paradasExistentes[x].Descripcion != e.target.getAttribute('data-desc')) {
-          app.todasParadas.push(paradasExistentes[x]);
-        }
-      }
-
-      localStorage.setItem('_horarios_paradas', JSON.stringify(app.todasParadas));
-      
-      app.mostrarFavoritos();
-    }    
-    */
   },
 
   editAdd: function(e) {
-    app.cancelAdd();
 
     alertify
       .defaultValue(e.target.getAttribute('data-desc'))
@@ -239,13 +218,7 @@ var app = {
       .cancelBtn("Cancelar")
       .prompt("Nueva descripcion para la parada " +e.target.getAttribute('data-id') +", máximo 20 caracteres",
         function (val, ev) {
-
-          // The click event is in the event variable, so you can use it here.
           ev.preventDefault();
-
-          // The value entered is availble in the val variable.
-          //alertify.success("You've clicked OK and typed: " + val);
-//
 
           var paradasExistentes = app.todasParadas;
           app.todasParadas = [];
@@ -269,25 +242,12 @@ var app = {
   },
 
   deleteBookmark: function() {
-    app.cancelAdd();
-    /*
-    var confirmarBorrar = confirm("Borrar todos las paradas");
-    if (confirmarBorrar) {
-      localStorage.removeItem('_horarios_paradas');
-      app.todasParadas = [];
-      app.mostrarFavoritos();
-    }
-*/
     alertify
       .okBtn("Borrar")
       .cancelBtn("Cancelar")
       .confirm("Borrar todas las paradas", function (ev) {
-
-          // The click event is in the
-          // event variable, so you can use
-          // it here.
           ev.preventDefault();
-          //alertify.success("You've clicked OK");
+
           localStorage.removeItem('_horarios_paradas');
           app.todasParadas = [];
           app.mostrarFavoritos();
@@ -301,23 +261,6 @@ var app = {
     while(listaFavoritos.firstChild) listaFavoritos.removeChild(listaFavoritos.firstChild);
 
     app.todasParadas.forEach(function(parada) {
-      console.log(parada);
-      
-      //<i class="fa fa-long-arrow-down" aria-hidden="true"></i>
-      /*
-      var iconoUp = document.createElement('i');
-      iconoUp.className = "editar fa fa-long-arrow-up btn btn-default";
-      iconoUp.setAttribute('aria-hidden', true);
-
-      listaFavoritos.appendChild(iconoUp);
-
-      var iconoDown = document.createElement('i');
-      iconoDown.className = "editar fa fa-long-arrow-down btn btn-default";
-      iconoDown.setAttribute('aria-hidden', true);
-
-      listaFavoritos.appendChild(iconoDown);
-*/
-      //<i class="fa fa-long-arrow-up" aria-hidden="true"></i>
       
       var item = document.createElement('span');
       item.className = "parada btn btn-default";
@@ -340,8 +283,6 @@ var app = {
 
       listaFavoritos.appendChild(iconoBorrar);
 
-      //<i class="fa fa-pencil" aria-hidden="true"></i>
-      //
       var iconoEditar = document.createElement('i');
       iconoEditar.className = "editar fa fa-pencil btn btn-default";
       iconoEditar.setAttribute('aria-hidden', true);

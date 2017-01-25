@@ -30,22 +30,20 @@
 			<i class="fa fa-search btn btn-default btn-lg" id="botonConsulta" aria-hidden="true"></i>
 		</div>
 
-		<div id="conter-descripcion" class="hide">
-			<input type="text" name="descripcion" id="descripcion" placeholder="Descripción Parada" size="18" style="color: #000000; font-size: 115%;" maxlength="20">
-			<i class="fa fa-undo btn btn-default btn-lg" id="cancelar" aria-hidden="true"></i>
-			<i class="fa fa-check btn btn-default btn-lg" id="guardar" aria-hidden="true"></i>
-		</div>
-
 		<div class="clear"></div>
 		<div id="cargando" class="hide"><i class="fa fa-circle-o-notch fa-spin fa-4x" aria-hidden="true"></i></div>		
 		<div class="clear"></div>
+
 		<div id="operacion">
 		</div>
-
 		
+		<div id="mostrar-tabla" class="hide">
+			<i class="fa fa-caret-square-o-right btn btn-default btn-lg" aria-hidden="true"></i>
+		</div>
+
 		<div id="resultado" class="hide">
 			<span id="hora"></span>
-			<i class="fa fa-eraser btn btn-default btn-lg" id="limpiar" aria-hidden="true"></i>
+			<i class="fa fa-caret-square-o-down btn btn-default btn-lg" id="limpiar" aria-hidden="true"></i>
 			<div class="clear"></div>
 			<table class="table table-striped table-bordered text-center">
 				<thead id="cabeceraTabla" class="hide">
@@ -56,23 +54,6 @@
 					</tr>
 				</thead>
 				<tbody id="tablaResultado">
-					<!--
-					<tr>
-						<td>S1</td>
-						<td>AAA5</td>
-						<td>5</td>
-					</tr>
-					<tr>
-						<td>S1</td>
-						<td>AAA5</td>
-						<td>5</td>
-					</tr>
-					<tr>
-						<td>S1</td>
-						<td>AAA5</td>
-						<td>5</td>
-					</tr>
-				-->
 				</tbody>
 			</table>
 		</div>
