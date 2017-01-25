@@ -271,7 +271,7 @@ var app = {
     app.todasParadas.forEach(function(parada) {
       
       var item = document.createElement('span');
-      item.className = "parada btn btn-default";
+      item.className = "parada btn btn-default btn-lg";
       item.setAttribute('data-id', parada.Number);
 
       var newContent = document.createTextNode(parada.Number + ": " + parada.Descripcion);
