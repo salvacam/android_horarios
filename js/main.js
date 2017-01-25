@@ -58,10 +58,13 @@ var app = {
     }
 
     //Desactivar boton consultar y quitar evento
-    app.botonConsulta.classList.toggle('disabled');
-    document.querySelector('.parada').classList.toggle('disabled');
+    app.botonConsulta.classList.toggle('disabled');    
     app.botonConsulta.removeEventListener('click', app.mostrar);
-    document.querySelector('.parada').removeEventListener('click', app.mostrarFavorito);
+    
+    if(document.querySelector('.parada')) {
+      document.querySelector('.parada').classList.toggle('disabled');
+      document.querySelector('.parada').removeEventListener('click', app.mostrarFavorito);
+    }
 
     cargando.classList.toggle('hide');
 
@@ -90,11 +93,14 @@ var app = {
 
   fn_errorXHR: function() {
     alertify.alert("Error al obtener los datos, compruebe su conexión");
+    
     app.botonConsulta.classList.toggle('disabled');
-    document.querySelector('.parada').classList.toggle('disabled');
-
     app.botonConsulta.addEventListener('click', app.mostrar);
-    document.querySelector('.parada').addEventListener('click', app.mostrarFavorito);
+    
+    if(document.querySelector('.parada')) {
+      document.querySelector('.parada').classList.toggle('disabled');  
+      document.querySelector('.parada').addEventListener('click', app.mostrarFavorito);
+    }
     
     app.cargando.classList.toggle('hide');
   },
@@ -103,8 +109,10 @@ var app = {
     app.botonConsulta.classList.toggle('disabled');
     app.botonConsulta.addEventListener('click', app.mostrar);
 
-    document.querySelector('.parada').classList.toggle('disabled');
-    document.querySelector('.parada').addEventListener('click', app.mostrarFavorito);
+    if(document.querySelector('.parada')) {
+      document.querySelector('.parada').classList.toggle('disabled');
+      document.querySelector('.parada').addEventListener('click', app.mostrarFavorito);
+    }
 
     app.cargando.classList.toggle('hide');
 
