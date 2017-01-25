@@ -162,6 +162,11 @@ div.clear {
 
 /******************* FAVORITOS *********************/
 
+#lista-favoritos {
+  padding-left: 15px;
+  padding-right: 2px;
+}
+
 #conter-descripcion {
   margin-top: 10px;
 }
@@ -182,8 +187,16 @@ body span.parada,
   margin-left: -15px;
 }
 
+
+body span.parada
+{  
+  padding-left: 3px;
+  padding-right: 3px;
+}
+
 .borrar, .editar{
-  margin-left: 10px;
+  margin-left: 8px;
+  margin-bottom: 20px;
 }
 
 .borrar {

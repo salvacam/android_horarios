@@ -21,7 +21,7 @@ gulp.task('minifyCSS', function() {
 gulp.task('minifyJS', function() {
 	gutil.log('Gulp is minify JS!');
 
-	gulp.src('js/main.js')
+  gulp.src(['!./js/main.min.js', './js/*.js'])
 	//gulp.src('js/*.js')		
   		//.pipe(concat('main.min.js'))  		
   		.pipe(uglify({

@@ -178,6 +178,36 @@ var app = {
 
   deleteAdd: function(e) {
     app.cancelAdd();
+    alertify
+      .okBtn("Borrar")
+      .cancelBtn("Cancelar")
+      .confirm("Borrar la parada " + e.target.getAttribute('data-id') + " - " + 
+      e.target.getAttribute('data-desc'), function (ev) {
+
+          // The click event is in the
+          // event variable, so you can use
+          // it here.
+          ev.preventDefault();
+          //alertify.success("You've clicked OK");
+          
+          var paradasExistentes = app.todasParadas;
+          app.todasParadas = [];
+          //recorrer el array 
+          for(var x in paradasExistentes) {
+            console.log(x);
+            if(paradasExistentes[x].Number != e.target.getAttribute('data-id') 
+                || paradasExistentes[x].Descripcion != e.target.getAttribute('data-desc')) {
+              app.todasParadas.push(paradasExistentes[x]);
+            }
+          }
+
+          localStorage.setItem('_horarios_paradas', JSON.stringify(app.todasParadas));
+          
+          app.mostrarFavoritos();
+      });
+
+
+/*
     var confirmarBorrar = confirm("Borrar la parada " + e.target.getAttribute('data-id') + " - " + 
       e.target.getAttribute('data-desc'));
     if (confirmarBorrar) {
@@ -197,21 +227,71 @@ var app = {
       
       app.mostrarFavoritos();
     }    
+    */
   },
 
-  editAdd: function() {
+  editAdd: function(e) {
     app.cancelAdd();
 
+    alertify
+      .defaultValue(e.target.getAttribute('data-desc'))
+      .okBtn("Editar")
+      .cancelBtn("Cancelar")
+      .prompt("Nueva descripcion para la parada " +e.target.getAttribute('data-id') +", máximo 20 caracteres",
+        function (val, ev) {
+
+          // The click event is in the event variable, so you can use it here.
+          ev.preventDefault();
+
+          // The value entered is availble in the val variable.
+          //alertify.success("You've clicked OK and typed: " + val);
+//
+
+          var paradasExistentes = app.todasParadas;
+          app.todasParadas = [];
+          //recorrer el array 
+          for(var x in paradasExistentes) {
+            console.log(x);
+            if(paradasExistentes[x].Number != e.target.getAttribute('data-id') 
+                || paradasExistentes[x].Descripcion != e.target.getAttribute('data-desc')) {
+              app.todasParadas.push(paradasExistentes[x]);
+            } else {
+              paradasExistentes[x].Descripcion = val;
+              app.todasParadas.push(paradasExistentes[x]);
+            }
+          }
+
+          localStorage.setItem('_horarios_paradas', JSON.stringify(app.todasParadas));
+          
+          app.mostrarFavoritos();
+        }
+      );
   },
 
   deleteBookmark: function() {
     app.cancelAdd();
+    /*
     var confirmarBorrar = confirm("Borrar todos las paradas");
     if (confirmarBorrar) {
       localStorage.removeItem('_horarios_paradas');
       app.todasParadas = [];
       app.mostrarFavoritos();
-    }    
+    }
+*/
+    alertify
+      .okBtn("Borrar")
+      .cancelBtn("Cancelar")
+      .confirm("Borrar todas las paradas", function (ev) {
+
+          // The click event is in the
+          // event variable, so you can use
+          // it here.
+          ev.preventDefault();
+          //alertify.success("You've clicked OK");
+          localStorage.removeItem('_horarios_paradas');
+          app.todasParadas = [];
+          app.mostrarFavoritos();
+      });
   },
 
   mostrarFavoritos: function(){
@@ -224,13 +304,26 @@ var app = {
       console.log(parada);
       
       //<i class="fa fa-long-arrow-down" aria-hidden="true"></i>
+      /*
+      var iconoUp = document.createElement('i');
+      iconoUp.className = "editar fa fa-long-arrow-up btn btn-default";
+      iconoUp.setAttribute('aria-hidden', true);
+
+      listaFavoritos.appendChild(iconoUp);
+
+      var iconoDown = document.createElement('i');
+      iconoDown.className = "editar fa fa-long-arrow-down btn btn-default";
+      iconoDown.setAttribute('aria-hidden', true);
+
+      listaFavoritos.appendChild(iconoDown);
+*/
       //<i class="fa fa-long-arrow-up" aria-hidden="true"></i>
       
       var item = document.createElement('span');
-      item.className = "parada btn btn-default btn-lg";
+      item.className = "parada btn btn-default";
       item.setAttribute('data-id', parada.Number);
 
-      var newContent = document.createTextNode(parada.Number + " - \x09" + parada.Descripcion);
+      var newContent = document.createTextNode(parada.Number + ": " + parada.Descripcion);
       item.appendChild(newContent);
 
       listaFavoritos.appendChild(item);
@@ -238,7 +331,7 @@ var app = {
       item.addEventListener('click', app.mostrarFavorito);
 
       var iconoBorrar = document.createElement('i');
-      iconoBorrar.className = "borrar fa fa-trash-o btn btn-default fa-2x";
+      iconoBorrar.className = "borrar fa fa-trash-o btn btn-default";
       iconoBorrar.setAttribute('aria-hidden', true);
       iconoBorrar.setAttribute('data-id', parada.Number);
       iconoBorrar.setAttribute('data-desc', parada.Descripcion);
@@ -248,6 +341,16 @@ var app = {
       listaFavoritos.appendChild(iconoBorrar);
 
       //<i class="fa fa-pencil" aria-hidden="true"></i>
+      //
+      var iconoEditar = document.createElement('i');
+      iconoEditar.className = "editar fa fa-pencil btn btn-default";
+      iconoEditar.setAttribute('aria-hidden', true);
+      iconoEditar.setAttribute('data-id', parada.Number);
+      iconoEditar.setAttribute('data-desc', parada.Descripcion);
+
+      iconoEditar.addEventListener('click', app.editAdd);
+
+      listaFavoritos.appendChild(iconoEditar);
 
       var salto = document.createElement('div');
       salto.className = "salto";
