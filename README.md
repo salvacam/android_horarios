@@ -3,4 +3,4 @@
 
 Aplicación para la consulta los horarios de las paradas de autobuses de Transportes Rober en Granada.
 
-<a href="http://salvacam.github.io/horario" target="_blank">Web</a>
+<a href="https://salvacam.github.io/horario" target="_blank">Web</a>
