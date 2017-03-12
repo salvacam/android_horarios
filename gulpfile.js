@@ -28,7 +28,9 @@ gulp.task('minifyJS', function() {
       		compress: {
         		drop_console: true
       		}
-		}))
+		}).on('error', function(e){
+            console.log(e);
+         }))
     	.pipe(concat('main.min.js'))
   		//.pipe(gulp.dest('./js/'));
   		.pipe(gulp.dest('./js/'));
@@ -38,3 +40,12 @@ gulp.task('minifyJS', function() {
 gulp.task('default',['minifyJS', 'minifyCSS'], function() {
   gutil.log('Gulp is running!');
 });
+
+
+gulp.task('scripts', ['clean'], function () {
+      return gulp.src('js/*.js')
+        .pipe(uglify().on('error', function(e){
+            console.log(e);
+         }))
+        .pipe(gulp.dest('minjs'));
+  });

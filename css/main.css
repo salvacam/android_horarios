@@ -4,7 +4,14 @@ body {
     min-width: 320px;
 }
 
+header {
+    position: fixed;
+    z-index: 1;
+}
+
 header h3 {
+    position: fixed;
+    width: 100%;
     margin: 0;
     background-color: #ccc;
     border-bottom: 1px solid #666;
@@ -16,7 +23,11 @@ header h3 {
 }
 
 .jumbotron {
-  background-color: white;
+    background-color: white;
+}
+
+.jumbotron #consulta {
+    margin-top: 40px;
 }
 
 #parada {
@@ -60,7 +71,7 @@ body span.parada {
   padding-right: 3px;
 }
 
-.borrar, .editar {
+.borrar, .editar, .subir, .bajar {
   margin-left: 5px;
   margin-bottom: 28px;
 }
@@ -70,4 +81,55 @@ body span.parada {
 #cargando {
   margin: 0 auto;
   text-align: center;
+}
+
+
+/******************* CONFIGURACIÓN *********************/
+body {
+    overflow-x: hidden;
+}
+
+#configradorDiv {
+    position: absolute;
+    top: 46px;
+    min-width: 100%;
+    margin-left: 100%;
+    padding: 10%;
+    padding-top: 20px;
+    
+    background: #ebebe0;
+}
+
+#configradorDiv span.parada {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#configradorDiv.swipe-izquierda{
+    -webkit-animation: swipe-izquierda 0.75s 1;          
+    margin-left: 0%;
+}
+
+
+#configradorDiv.swipe-derecha{
+    -webkit-animation: swipe-derecha 0.75s 1;          
+    margin-left: 100%;
+}
+
+@-webkit-keyframes swipe-izquierda {
+  0% {
+    margin-left: 100%;
+  }
+  100% {
+    margin-left: 0%;
+  }
+}
+
+@-webkit-keyframes swipe-derecha {
+  0% {
+    margin-left: 0%;
+  }
+  100% {
+    margin-left: 100%;
+  }
 }

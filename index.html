@@ -8,21 +8,29 @@
 
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
 
-  <meta name="theme-color" content="#CCC">
+  	<meta name="theme-color" content="#CCC">
 
-    <link rel="manifest" href="./manifest.json">
+        <link rel="manifest" href="./manifest.json">
 
-	<link rel="stylesheet" href="css/style.min.css">
+	<link rel="stylesheet" href="css/style.min.css">	
+
 	<link rel="icon" href="img/icon.png">
 
 </head>
 <body>
 
 	<header>
-		<h3><img src="img/icon.png" alt="icon" height="24"> Horarios</h3>
+		<h3><img src="img/icon.png" alt="icon" height="24"> Horarios 
+                    <i id="botonMenu" class="fa fa-bars pull-right" aria-hidden="true"></i></h3>
+                    
 	</header>
 
-	<div class="container principal jumbotron">
+        
+	<div class="container" id="configradorDiv">
+        </div>
+        
+        <div class="container principal jumbotron" id="principalDiv">
+
 
 		<div id="consulta">
 			<input type="number" name="parada" id="parada" placeholder="Parada" maxlength="4" size="12" style="color: #000000; font-size: 120%;" value="">
@@ -62,7 +70,8 @@
 		
 		<div id="lista-favoritos" class="container"></div>
 	</div>
+    
+	<script type="text/javascript" charset="utf-8" src="js/main.min.js"></script>	
 
-	<script type="text/javascript" charset="utf-8" src="js/main.min.js"></script>
 </body>
 </html>

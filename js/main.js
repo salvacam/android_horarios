@@ -12,9 +12,14 @@ var app = {
   guardar: document.getElementById('guardar'),
 
   todasParadas: [],
+  ordenNuevo: 0,
+  ordenInicio: 0,
+  tiempoAnimacion: 750,
+  configradorDiv: document.getElementById('configradorDiv'),
+  principalDiv: document.getElementById('principalDiv'),
 
-
-  botonConsulta: document.getElementById('botonConsulta'),
+  botonConsulta: document.getElementById('botonConsulta'),  
+  botonMenu: document.getElementById('botonMenu'),
   cargando: document.getElementById('cargando'),
   botonAdd: document.getElementById('botonAdd'),
   operacion: document.getElementById('operacion'),
@@ -22,16 +27,21 @@ var app = {
   tablaResultado: document.getElementById('tablaResultado'),
   cabeceraTabla: document.getElementById('cabeceraTabla').classList,
   botonesFavoritos: document.querySelector('.parada'),
+  
 
   inicio: function() {
 
     app.botonConsulta.addEventListener('click', app.mostrar);
     
-    app.botonAdd.addEventListener('click', app.addBookmark);
+    app.botonAdd.addEventListener('click', app.addBookmark);    
+    
+    app.botonMenu.addEventListener('click', app.showMenu);
+    
+    app.configradorDiv.style.minHeight = (window.innerHeight - 46)+"px";
 
     //Mostrar favoritos
     if(localStorage.getItem('_horarios_paradas')) {
-      app.todasParadas = JSON.parse(localStorage.getItem('_horarios_paradas'));
+      app.getAllBusStopOrder();
     }
     app.mostrarFavoritos();
     
@@ -43,9 +53,42 @@ var app = {
         });
     }
   },
+  
+  getAllBusStopOrder: function(){
+      app.todasParadas = JSON.parse(localStorage.getItem('_horarios_paradas'));
+      function compare(a,b) {
+        if (a.Order < b.Order)
+          return -1;
+        if (a.Order > b.Order)
+          return 1;
+        return 0;
+      }
+      app.todasParadas.sort(compare);
+      app.ordenNuevo = app.todasParadas[app.todasParadas.length - 1].Order;
+      app.ordenInicio = app.todasParadas[0].Order;
+  },
+  
+  showMenu: function() {          
+    //Durante el tiempo de la animación se quita el evento del boton menú
+    app.botonMenu.removeEventListener('click', app.showMenu);
+    setTimeout(function(){ app.botonMenu.addEventListener('click', app.showMenu); }, app.tiempoAnimacion);
+    
+    if (app.configradorDiv.classList.contains('swipe-izquierda')) {
+        app.configradorDiv.classList.add('swipe-derecha');            
+        app.configradorDiv.classList.remove('swipe-izquierda');    
+        app.botonMenu.classList.add('fa-bars');
+        app.botonMenu.classList.remove('fa-arrow-right');
+        app.principalDiv.classList.remove('hide');
+    } else {        
+        app.configradorDiv.classList.remove('swipe-derecha');            
+        app.configradorDiv.classList.add('swipe-izquierda');    
+        app.botonMenu.classList.remove('fa-bars');
+        app.botonMenu.classList.add('fa-arrow-right');
+        app.principalDiv.classList.add('hide');
+    }
+  },
 
   mostrarFavorito: function(e) {
-
     document.getElementById("parada").value = e.target.getAttribute('data-id');
     app.mostrar();
   },
@@ -66,7 +109,7 @@ var app = {
       document.querySelector('.parada').removeEventListener('click', app.mostrarFavorito);
     }
 
-    cargando.classList.toggle('hide');
+    app.cargando.classList.toggle('hide');
 
     var url = app.URL_SERVER + numparada;
     
@@ -117,12 +160,12 @@ var app = {
     app.cargando.classList.toggle('hide');
 
     if (data.hasOwnProperty("error")){
-      operacion.textContent = data.error;
+      app.operacion.textContent = data.error;
       return false;
     }
 
     if (data.length < 1) {
-      operacion.textContent = "No hay bus acercandose";
+      app.operacion.textContent = "No hay bus acercandose";
       return false;
     }
 
@@ -172,6 +215,14 @@ var app = {
       alertify.alert("Debes introducir un número de parada");
       return;
     }
+    
+    for (var i in app.todasParadas) {
+        if(app.todasParadas[i].Number === numparada) {
+            alertify.alert("Ya tienes la parada " + numparada + " guardada con la descripción \"" + app.todasParadas[i].Descripcion +"\"");
+            return;
+        }
+    }
+    
 
     alertify
       .defaultValue("Descripcion de la parada")
@@ -181,7 +232,7 @@ var app = {
         function (val, ev) {
           ev.preventDefault();
 
-          var item = {Order: 1, Number: numparada, Descripcion: val};
+          var item = {Order: app.ordenNuevo + 1, Number: numparada, Descripcion: val};
 
           app.todasParadas.push(item);
           localStorage.setItem('_horarios_paradas', JSON.stringify(app.todasParadas));          
@@ -193,24 +244,23 @@ var app = {
   },
 
   deleteAdd: function(e) {
+    var numparada = e.target.getAttribute('data-id');
     alertify
       .okBtn("Borrar")
       .cancelBtn("Cancelar")
-      .confirm("Borrar la parada " + e.target.getAttribute('data-id') + " - " + 
-      e.target.getAttribute('data-desc'), function (ev) {
+      .confirm("¿Borrar la parada " + e.target.getAttribute('data-id') + " - " + 
+      e.target.getAttribute('data-desc') + "?", function (ev) {
           ev.preventDefault();
-          
+            
           var paradasExistentes = app.todasParadas;
           app.todasParadas = [];
           //recorrer el array 
           for(var x in paradasExistentes) {
-            console.log(x);
-            if(paradasExistentes[x].Number != e.target.getAttribute('data-id') 
-                || paradasExistentes[x].Descripcion != e.target.getAttribute('data-desc')) {
+            if(paradasExistentes[x].Number !== numparada) {
               app.todasParadas.push(paradasExistentes[x]);
             }
           }
-
+          
           localStorage.setItem('_horarios_paradas', JSON.stringify(app.todasParadas));
           
           app.mostrarFavoritos();
@@ -219,7 +269,8 @@ var app = {
   },
 
   editAdd: function(e) {
-
+    var numparada = e.target.getAttribute('data-id');
+    
     alertify
       .defaultValue(e.target.getAttribute('data-desc'))
       .okBtn("Editar")
@@ -227,21 +278,13 @@ var app = {
       .prompt("Nueva descripcion para la parada " +e.target.getAttribute('data-id') +", máximo 20 caracteres",
         function (val, ev) {
           ev.preventDefault();
-
-          var paradasExistentes = app.todasParadas;
-          app.todasParadas = [];
-          //recorrer el array 
-          for(var x in paradasExistentes) {
-            console.log(x);
-            if(paradasExistentes[x].Number != e.target.getAttribute('data-id') 
-                || paradasExistentes[x].Descripcion != e.target.getAttribute('data-desc')) {
-              app.todasParadas.push(paradasExistentes[x]);
-            } else {
-              paradasExistentes[x].Descripcion = val;
-              app.todasParadas.push(paradasExistentes[x]);
+          
+          for (var i in app.todasParadas) {
+            if(app.todasParadas[i].Number === numparada) {
+              app.todasParadas[i].Descripcion = val;
             }
           }
-
+          
           localStorage.setItem('_horarios_paradas', JSON.stringify(app.todasParadas));
           
           app.mostrarFavoritos();
@@ -253,23 +296,61 @@ var app = {
     alertify
       .okBtn("Borrar")
       .cancelBtn("Cancelar")
-      .confirm("Borrar todas las paradas", function (ev) {
+      .confirm("¿Borrar todas las paradas?", function (ev) {
           ev.preventDefault();
 
           localStorage.removeItem('_horarios_paradas');
-          app.todasParadas = [];
+          app.todasParadas = [];          
+          app.ordenNuevo = 0;
+          app.ordenInicio = 0;
           app.mostrarFavoritos();
       });
   },
+  
+  upBookmark: function(e){
+      var source = e.target.getAttribute('data-id');      
+      var newOrder = 0;
+      
+      for (var i in app.todasParadas) {
+        if(app.todasParadas[i].Number === source) {
+            var tempOrder = app.todasParadas[i].Order;
+            app.todasParadas[i].Order = newOrder;
+            app.todasParadas[parseInt(i)-1].Order = tempOrder;
+        }
+        newOrder = app.todasParadas[i].Order;
+      }
+      localStorage.setItem('_horarios_paradas', JSON.stringify(app.todasParadas));    
+      app.mostrarFavoritos();
+  },  
+  
+  downBookmark: function(e){
+      var source = e.target.getAttribute('data-id');      
+      var newOrder = 0;
+      
+      for (var i in app.todasParadas) {          
+        newOrder = app.todasParadas[i].Order;
+        if(app.todasParadas[i].Number === source) {
+            var tempOrder = app.todasParadas[parseInt(i)+1].Order;
+            app.todasParadas[parseInt(i)+1].Order = newOrder;
+            app.todasParadas[i].Order = tempOrder;
+        }
+      }      
+      localStorage.setItem('_horarios_paradas', JSON.stringify(app.todasParadas));    
+      app.mostrarFavoritos();
+  },
 
   mostrarFavoritos: function(){
-    var listaFavoritos = document.getElementById('lista-favoritos');
+    app.getAllBusStopOrder();
+    var listaFavoritos = document.getElementById('lista-favoritos');    
+    var listaConfigurador = document.getElementById('configradorDiv');
+
     
     //TODO crear function
-    while(listaFavoritos.firstChild) listaFavoritos.removeChild(listaFavoritos.firstChild);
+    while(listaFavoritos.firstChild) listaFavoritos.removeChild(listaFavoritos.firstChild);    
+    while(listaConfigurador.firstChild) listaConfigurador.removeChild(listaConfigurador.firstChild);
 
     app.todasParadas.forEach(function(parada) {
-      
+        
       var item = document.createElement('span');
       item.className = "parada btn btn-default btn-lg";
       item.setAttribute('data-id', parada.Number);
@@ -278,32 +359,67 @@ var app = {
       item.appendChild(newContent);
 
       listaFavoritos.appendChild(item);
-      
       item.addEventListener('click', app.mostrarFavorito);
+      
+      var itemConf = document.createElement('span');
+      itemConf.className = "parada btn btn-default btn-lg";
+
+      var newContent = document.createTextNode(parada.Number);
+      itemConf.appendChild(newContent);
+
+      listaConfigurador.appendChild(itemConf);
 
       var iconoBorrar = document.createElement('i');
-      iconoBorrar.className = "borrar fa fa-trash-o btn btn-default";
+      iconoBorrar.className = "borrar fa fa-trash-o fa-2x btn btn-default";
       iconoBorrar.setAttribute('aria-hidden', true);
       iconoBorrar.setAttribute('data-id', parada.Number);
       iconoBorrar.setAttribute('data-desc', parada.Descripcion);
 
       iconoBorrar.addEventListener('click', app.deleteAdd);
 
-      listaFavoritos.appendChild(iconoBorrar);
+      //listaFavoritos.appendChild(iconoBorrar);
+      listaConfigurador.appendChild(iconoBorrar);
 
       var iconoEditar = document.createElement('i');
-      iconoEditar.className = "editar fa fa-pencil btn btn-default";
+      iconoEditar.className = "editar fa fa-pencil fa-2x btn btn-default";
       iconoEditar.setAttribute('aria-hidden', true);
       iconoEditar.setAttribute('data-id', parada.Number);
       iconoEditar.setAttribute('data-desc', parada.Descripcion);
 
       iconoEditar.addEventListener('click', app.editAdd);
 
-      listaFavoritos.appendChild(iconoEditar);
+      listaConfigurador.appendChild(iconoEditar);
+      
+      
+      var iconoSubir = document.createElement('i');
+      iconoSubir.className = "subir fa fa-long-arrow-up fa-2x btn btn-default";
+      iconoSubir.setAttribute('aria-hidden', true);
+      iconoSubir.setAttribute('data-id', parada.Number);
+
+      if(parada.Order !== app.ordenInicio) {
+        iconoSubir.addEventListener('click', app.upBookmark);
+      } else {
+        iconoSubir.classList.add('disabled');
+      }
+      listaConfigurador.appendChild(iconoSubir);
+      
+      
+      var iconoBajar = document.createElement('i');
+      iconoBajar.className = "bajar fa fa-long-arrow-down fa-2x btn btn-default";
+      iconoBajar.setAttribute('aria-hidden', true);
+      iconoBajar.setAttribute('data-id', parada.Number);
+
+      if(parada.Order !== app.ordenNuevo) {
+        iconoBajar.addEventListener('click', app.downBookmark);
+      } else {
+        iconoBajar.classList.add('disabled');
+      }
+      listaConfigurador.appendChild(iconoBajar);
 
       var salto = document.createElement('div');
       salto.className = "salto";
       listaFavoritos.appendChild(salto);
+      listaConfigurador.appendChild(salto);
     });
 
     if(app.todasParadas.length > 0) {
@@ -312,11 +428,12 @@ var app = {
       iconoBorrarTodo.className = "fa fa-trash btn btn-default fa-2x btn-lg";
       iconoBorrarTodo.setAttribute('aria-hidden', true);
       iconoBorrarTodo.setAttribute('id', 'borrar-todo');
+      iconoBorrarTodo.textContent = ' BORRAR TODAS';
 
-      listaFavoritos.appendChild(iconoBorrarTodo);
+      listaConfigurador.appendChild(iconoBorrarTodo);
 
       iconoBorrarTodo.addEventListener('click', app.deleteBookmark);
     }
 
   }
-}
+};
