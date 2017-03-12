@@ -42,8 +42,8 @@ var app = {
     //Mostrar favoritos
     if(localStorage.getItem('_horarios_paradas')) {
       app.getAllBusStopOrder();
+      app.mostrarFavoritos();
     }
-    app.mostrarFavoritos();
     
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker
