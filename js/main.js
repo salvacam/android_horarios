@@ -370,7 +370,7 @@ var app = {
       listaConfigurador.appendChild(itemConf);
 
       var iconoBorrar = document.createElement('i');
-      iconoBorrar.className = "borrar fa fa-trash-o fa-2x btn btn-default";
+      iconoBorrar.className = "borrar fa fa-trash-o btn btn-default btn-lg";
       iconoBorrar.setAttribute('aria-hidden', true);
       iconoBorrar.setAttribute('data-id', parada.Number);
       iconoBorrar.setAttribute('data-desc', parada.Descripcion);
@@ -381,7 +381,7 @@ var app = {
       listaConfigurador.appendChild(iconoBorrar);
 
       var iconoEditar = document.createElement('i');
-      iconoEditar.className = "editar fa fa-pencil fa-2x btn btn-default";
+      iconoEditar.className = "editar fa fa-pencil btn btn-default btn-lg";
       iconoEditar.setAttribute('aria-hidden', true);
       iconoEditar.setAttribute('data-id', parada.Number);
       iconoEditar.setAttribute('data-desc', parada.Descripcion);
@@ -392,7 +392,7 @@ var app = {
       
       
       var iconoSubir = document.createElement('i');
-      iconoSubir.className = "subir fa fa-long-arrow-up fa-2x btn btn-default";
+      iconoSubir.className = "subir fa fa-long-arrow-up btn btn-default btn-lg";
       iconoSubir.setAttribute('aria-hidden', true);
       iconoSubir.setAttribute('data-id', parada.Number);
 
@@ -405,7 +405,7 @@ var app = {
       
       
       var iconoBajar = document.createElement('i');
-      iconoBajar.className = "bajar fa fa-long-arrow-down fa-2x btn btn-default";
+      iconoBajar.className = "bajar fa fa-long-arrow-down btn btn-default btn-lg";
       iconoBajar.setAttribute('aria-hidden', true);
       iconoBajar.setAttribute('data-id', parada.Number);
 
@@ -425,10 +425,13 @@ var app = {
     if(app.todasParadas.length > 0) {
 
       var iconoBorrarTodo = document.createElement('i');
-      iconoBorrarTodo.className = "fa fa-trash btn btn-default fa-2x btn-lg";
+      iconoBorrarTodo.className = "fa fa-trash btn btn-default fa-2x";
       iconoBorrarTodo.setAttribute('aria-hidden', true);
       iconoBorrarTodo.setAttribute('id', 'borrar-todo');
-      iconoBorrarTodo.textContent = ' BORRAR TODAS';
+      
+      var iconoBorrarTodoTexto = document.createElement('span');
+      iconoBorrarTodoTexto.textContent = ' BORRAR TODAS';
+      iconoBorrarTodo.appendChild(iconoBorrarTodoTexto);
 
       listaConfigurador.appendChild(iconoBorrarTodo);
 
