@@ -6,7 +6,7 @@ var app = {
 
   //URL_SERVER: 'index.php?parada=',
   //URL_SERVER: 'http://transportesrober.com:9055/websae/Transportes/parada.aspx?idparada=',
-  URL_SERVER: 'https://featherbrained-exec.000webhostapp.com/horarios/index.php?parada=',
+  URL_SERVER: 'https://calcicolous-moonlig.000webhostapp.com/horarios/index.php?parada=',
 
   cancelar: document.getElementById('cancelar'),
   guardar: document.getElementById('guardar'),
@@ -18,7 +18,7 @@ var app = {
   configradorDiv: document.getElementById('configradorDiv'),
   principalDiv: document.getElementById('principalDiv'),
 
-  botonConsulta: document.getElementById('botonConsulta'),  
+  botonConsulta: document.getElementById('botonConsulta'),
   botonMenu: document.getElementById('botonMenu'),
   cargando: document.getElementById('cargando'),
   botonAdd: document.getElementById('botonAdd'),
@@ -27,16 +27,16 @@ var app = {
   tablaResultado: document.getElementById('tablaResultado'),
   cabeceraTabla: document.getElementById('cabeceraTabla').classList,
   botonesFavoritos: document.querySelector('.parada'),
-  
+
 
   inicio: function() {
 
     app.botonConsulta.addEventListener('click', app.mostrar);
-    
-    app.botonAdd.addEventListener('click', app.addBookmark);    
-    
+
+    app.botonAdd.addEventListener('click', app.addBookmark);
+
     app.botonMenu.addEventListener('click', app.showMenu);
-    
+
     app.configradorDiv.style.minHeight = (window.innerHeight - 46)+"px";
 
     //Mostrar favoritos
@@ -44,16 +44,16 @@ var app = {
       app.getAllBusStopOrder();
       app.mostrarFavoritos();
     }
-    
+
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker
         .register('service-worker.js')
         .then(function() {
-          //console.log('Service Worker Registered'); 
+          //console.log('Service Worker Registered');
         });
     }
   },
-  
+
   getAllBusStopOrder: function(){
       app.todasParadas = JSON.parse(localStorage.getItem('_horarios_paradas'));
       function compare(a,b) {
@@ -67,21 +67,21 @@ var app = {
       app.ordenNuevo = app.todasParadas[app.todasParadas.length - 1].Order;
       app.ordenInicio = app.todasParadas[0].Order;
   },
-  
-  showMenu: function() {          
+
+  showMenu: function() {
     //Durante el tiempo de la animación se quita el evento del boton menú
     app.botonMenu.removeEventListener('click', app.showMenu);
     setTimeout(function(){ app.botonMenu.addEventListener('click', app.showMenu); }, app.tiempoAnimacion);
-    
+
     if (app.configradorDiv.classList.contains('swipe-izquierda')) {
-        app.configradorDiv.classList.add('swipe-derecha');            
-        app.configradorDiv.classList.remove('swipe-izquierda');    
+        app.configradorDiv.classList.add('swipe-derecha');
+        app.configradorDiv.classList.remove('swipe-izquierda');
         app.botonMenu.classList.add('fa-bars');
         app.botonMenu.classList.remove('fa-arrow-right');
         app.principalDiv.classList.remove('hide');
-    } else {        
-        app.configradorDiv.classList.remove('swipe-derecha');            
-        app.configradorDiv.classList.add('swipe-izquierda');    
+    } else {
+        app.configradorDiv.classList.remove('swipe-derecha');
+        app.configradorDiv.classList.add('swipe-izquierda');
         app.botonMenu.classList.remove('fa-bars');
         app.botonMenu.classList.add('fa-arrow-right');
         app.principalDiv.classList.add('hide');
@@ -101,9 +101,9 @@ var app = {
     }
 
     //Desactivar boton consultar y quitar evento
-    app.botonConsulta.classList.toggle('disabled');    
+    app.botonConsulta.classList.toggle('disabled');
     app.botonConsulta.removeEventListener('click', app.mostrar);
-    
+
     if(document.querySelector('.parada')) {
       document.querySelector('.parada').classList.toggle('disabled');
       document.querySelector('.parada').removeEventListener('click', app.mostrarFavorito);
@@ -112,9 +112,9 @@ var app = {
     app.cargando.classList.toggle('hide');
 
     var url = app.URL_SERVER + numparada;
-    
+
     var xhr = new XMLHttpRequest();
-    
+
     xhr.open ("GET", url, true);
     xhr.onreadystatechange = function () {
       if (xhr.readyState == 4) {
@@ -136,15 +136,15 @@ var app = {
 
   fn_errorXHR: function() {
     alertify.alert("Error al obtener los datos, compruebe su conexión");
-    
+
     app.botonConsulta.classList.toggle('disabled');
     app.botonConsulta.addEventListener('click', app.mostrar);
-    
+
     if(document.querySelector('.parada')) {
-      document.querySelector('.parada').classList.toggle('disabled');  
+      document.querySelector('.parada').classList.toggle('disabled');
       document.querySelector('.parada').addEventListener('click', app.mostrarFavorito);
     }
-    
+
     app.cargando.classList.toggle('hide');
   },
 
@@ -208,21 +208,21 @@ var app = {
   },
 
   addBookmark: function() {
-    
+
     var numparada = document.getElementById("parada").value;
 
     if (!numparada || numparada === "") {
       alertify.alert("Debes introducir un número de parada");
       return;
     }
-    
+
     for (var i in app.todasParadas) {
         if(app.todasParadas[i].Number === numparada) {
             alertify.alert("Ya tienes la parada " + numparada + " guardada con la descripción \"" + app.todasParadas[i].Descripcion +"\"");
             return;
         }
     }
-    
+
 
     alertify
       .defaultValue("Descripcion de la parada")
@@ -235,7 +235,7 @@ var app = {
           var item = {Order: app.ordenNuevo + 1, Number: numparada, Descripcion: val};
 
           app.todasParadas.push(item);
-          localStorage.setItem('_horarios_paradas', JSON.stringify(app.todasParadas));          
+          localStorage.setItem('_horarios_paradas', JSON.stringify(app.todasParadas));
 
           // Actualizar favoritos
           app.mostrarFavoritos();
@@ -248,21 +248,21 @@ var app = {
     alertify
       .okBtn("Borrar")
       .cancelBtn("Cancelar")
-      .confirm("¿Borrar la parada " + e.target.getAttribute('data-id') + " - " + 
+      .confirm("¿Borrar la parada " + e.target.getAttribute('data-id') + " - " +
       e.target.getAttribute('data-desc') + "?", function (ev) {
           ev.preventDefault();
-            
+
           var paradasExistentes = app.todasParadas;
           app.todasParadas = [];
-          //recorrer el array 
+          //recorrer el array
           for(var x in paradasExistentes) {
             if(paradasExistentes[x].Number !== numparada) {
               app.todasParadas.push(paradasExistentes[x]);
             }
           }
-          
+
           localStorage.setItem('_horarios_paradas', JSON.stringify(app.todasParadas));
-          
+
           app.mostrarFavoritos();
       });
 
@@ -270,7 +270,7 @@ var app = {
 
   editAdd: function(e) {
     var numparada = e.target.getAttribute('data-id');
-    
+
     alertify
       .defaultValue(e.target.getAttribute('data-desc'))
       .okBtn("Editar")
@@ -278,15 +278,15 @@ var app = {
       .prompt("Nueva descripcion para la parada " +e.target.getAttribute('data-id') +", máximo 20 caracteres",
         function (val, ev) {
           ev.preventDefault();
-          
+
           for (var i in app.todasParadas) {
             if(app.todasParadas[i].Number === numparada) {
               app.todasParadas[i].Descripcion = val;
             }
           }
-          
+
           localStorage.setItem('_horarios_paradas', JSON.stringify(app.todasParadas));
-          
+
           app.mostrarFavoritos();
         }
       );
@@ -300,17 +300,17 @@ var app = {
           ev.preventDefault();
 
           localStorage.removeItem('_horarios_paradas');
-          app.todasParadas = [];          
+          app.todasParadas = [];
           app.ordenNuevo = 0;
           app.ordenInicio = 0;
           app.mostrarFavoritos();
       });
   },
-  
+
   upBookmark: function(e){
-      var source = e.target.getAttribute('data-id');      
+      var source = e.target.getAttribute('data-id');
       var newOrder = 0;
-      
+
       for (var i in app.todasParadas) {
         if(app.todasParadas[i].Number === source) {
             var tempOrder = app.todasParadas[i].Order;
@@ -319,38 +319,38 @@ var app = {
         }
         newOrder = app.todasParadas[i].Order;
       }
-      localStorage.setItem('_horarios_paradas', JSON.stringify(app.todasParadas));    
+      localStorage.setItem('_horarios_paradas', JSON.stringify(app.todasParadas));
       app.mostrarFavoritos();
-  },  
-  
+  },
+
   downBookmark: function(e){
-      var source = e.target.getAttribute('data-id');      
+      var source = e.target.getAttribute('data-id');
       var newOrder = 0;
-      
-      for (var i in app.todasParadas) {          
+
+      for (var i in app.todasParadas) {
         newOrder = app.todasParadas[i].Order;
         if(app.todasParadas[i].Number === source) {
             var tempOrder = app.todasParadas[parseInt(i)+1].Order;
             app.todasParadas[parseInt(i)+1].Order = newOrder;
             app.todasParadas[i].Order = tempOrder;
         }
-      }      
-      localStorage.setItem('_horarios_paradas', JSON.stringify(app.todasParadas));    
+      }
+      localStorage.setItem('_horarios_paradas', JSON.stringify(app.todasParadas));
       app.mostrarFavoritos();
   },
 
   mostrarFavoritos: function(){
     app.getAllBusStopOrder();
-    var listaFavoritos = document.getElementById('lista-favoritos');    
+    var listaFavoritos = document.getElementById('lista-favoritos');
     var listaConfigurador = document.getElementById('configradorDiv');
 
-    
+
     //TODO crear function
-    while(listaFavoritos.firstChild) listaFavoritos.removeChild(listaFavoritos.firstChild);    
+    while(listaFavoritos.firstChild) listaFavoritos.removeChild(listaFavoritos.firstChild);
     while(listaConfigurador.firstChild) listaConfigurador.removeChild(listaConfigurador.firstChild);
 
     app.todasParadas.forEach(function(parada) {
-        
+
       var item = document.createElement('span');
       item.className = "parada btn btn-default btn-lg";
       item.setAttribute('data-id', parada.Number);
@@ -360,7 +360,7 @@ var app = {
 
       listaFavoritos.appendChild(item);
       item.addEventListener('click', app.mostrarFavorito);
-      
+
       var itemConf = document.createElement('span');
       itemConf.className = "parada btn btn-default btn-lg";
 
@@ -389,8 +389,8 @@ var app = {
       iconoEditar.addEventListener('click', app.editAdd);
 
       listaConfigurador.appendChild(iconoEditar);
-      
-      
+
+
       var iconoSubir = document.createElement('i');
       iconoSubir.className = "subir fa fa-long-arrow-up btn btn-default btn-lg";
       iconoSubir.setAttribute('aria-hidden', true);
@@ -402,8 +402,8 @@ var app = {
         iconoSubir.classList.add('disabled');
       }
       listaConfigurador.appendChild(iconoSubir);
-      
-      
+
+
       var iconoBajar = document.createElement('i');
       iconoBajar.className = "bajar fa fa-long-arrow-down btn btn-default btn-lg";
       iconoBajar.setAttribute('aria-hidden', true);
@@ -428,7 +428,7 @@ var app = {
       iconoBorrarTodo.className = "fa fa-trash btn btn-default fa-2x";
       iconoBorrarTodo.setAttribute('aria-hidden', true);
       iconoBorrarTodo.setAttribute('id', 'borrar-todo');
-      
+
       var iconoBorrarTodoTexto = document.createElement('span');
       iconoBorrarTodoTexto.textContent = ' BORRAR TODAS';
       iconoBorrarTodo.appendChild(iconoBorrarTodoTexto);
