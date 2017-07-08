@@ -144,17 +144,28 @@ var app = {
 
   prueba_notificacion: function(line) {
     if (Notification) {
-      //if (Notification.permission !== "granted") {
-        
+      if (Notification.permission !== "granted") {
+        Notification.requestPermission();
+      } else {                
         Notification.requestPermission(function(result) {
           if (result === 'granted') {
-            navigator.serviceWorker.ready.then(function(registration) {
-              registration.showNotification('Notification with ServiceWorker');
+            navigator.serviceWorker.ready.then(function(registration) {              
+              var title = "Horarios";
+              var body = "Acercandose la linea " + line;
+              var icon = "img/icon-48x48.png";
+              var tag =  "bus";
+              //registration.showNotification('Notification with ServiceWorker');
+              registration.showNotification(title, {  
+                    body: body,
+                    icon: icon,
+                    tag: tag
+                  })  
             });
           }
         });
-
-      //}
+      }
+    }
+      /*
       var title = "Horarios";
       //var title = "";
 
@@ -172,6 +183,7 @@ var app = {
       };
 
       setTimeout( function() { noti.close(); }, 10000)};
+      */
   },
 
   fn_errorXHR: function() {

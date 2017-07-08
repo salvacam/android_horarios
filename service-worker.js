@@ -58,22 +58,6 @@ self.addEventListener('fetch', function(event) {
   }));
 });
 
-self.addEventListener('showNotification', function(event) {  
-  console.log('Received a push message', event);
-
-  var title = 'Yay a message.';  
-  var body = 'We have received a push message.';  
-  var icon = 'img/icon-48x48.png';  
-  var tag = 'horarioBus-tag';
-
-  event.waitUntil(  
-    self.registration.showNotification(title, {  
-      body: body,  
-      icon: icon,  
-      tag: tag  
-    })  
-  );  
-});
 /*
 self.addEventListener('fetch', function(e) {
   console.log('[ServiceWorker] Fetch', e.request.url);
