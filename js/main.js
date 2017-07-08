@@ -158,7 +158,8 @@ var app = {
               registration.showNotification(title, {  
                 body: body,
                 icon: icon,
-                tag: tag
+                tag: tag,
+                timestamp: Date.parse('01 Jan 2000 00:00:00')
               });
             });
           }
