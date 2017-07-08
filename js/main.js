@@ -149,9 +149,9 @@ var app = {
       }
       Notification.requestPermission(function(result) {
         if (result === 'granted') {
-          navigator.serviceWorker.ready.then(function(registration) {              
+          navigator.serviceWorker.ready.then(function(registration) {
+            var title = "Horarios";
             var options = {
-              title: "Horarios",
               body: "Acercandose la linea " + line,
               icon: "img/icon-48x48.png",
               tag:  "bus"
