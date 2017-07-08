@@ -7,6 +7,7 @@ var app = {
   //URL_SERVER: 'index.php?parada=',
   //URL_SERVER: 'http://transportesrober.com:9055/websae/Transportes/parada.aspx?idparada=',
   URL_SERVER: 'https://calcicolous-moonlig.000webhostapp.com/horarios/index.php?parada=',
+  //URL_SERVER: 'https://calcicolous-moonlig.000webhostapp.com/horarios/index_mock.php?parada=',
 
   cancelar: document.getElementById('cancelar'),
   guardar: document.getElementById('guardar'),
@@ -122,13 +123,14 @@ var app = {
         if (xhr.status == 200) {
           var data = JSON.parse(xhr.responseText);
           app.renderResult(data, numparada);
-
+          
+          // Delete old notifications
           for (var i=0; i<app.timeOuts.length; i++) {
             clearTimeout(app.timeOuts[i]);
           }
           app.timeOuts = [];
-          //TODO crear array y asignar todos los timeout de cada linea por llegar
-          // si se hace otra llamada eliminar todos los timeout
+
+          // Create new notifications
           if (!data.error) {
             data.forEach(function(item) {
               app.timeOuts.push(
@@ -138,7 +140,6 @@ var app = {
               );            
             });
           }
-          // end TODO
 
         } else {
           app.fn_errorXHR();
