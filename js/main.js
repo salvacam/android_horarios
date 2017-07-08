@@ -126,13 +126,15 @@ var app = {
 
           //TODO crear array y asignar todos los timeout de cada linea por llegar
           // si se hace otra llamada eliminar todos los timeout
-          data.forEach(function(item) {
-            app.timeOuts.push(
-              setTimeout(function() {
-                app.showNotification(item.linea, numparada);
-              }, (item.tiempo-1) * 60 * 1000)
-            );            
-          });
+          if (!data.error) {
+            data.forEach(function(item) {
+              app.timeOuts.push(
+                setTimeout(function() {
+                  app.showNotification(item.linea, numparada);
+                }, (item.tiempo-1) * 60 * 1000)
+              );            
+            });
+          }
           // end TODO
 
         } else {
