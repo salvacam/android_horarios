@@ -144,9 +144,17 @@ var app = {
 
   prueba_notificacion: function(line) {
     if (Notification) {
-      if (Notification.permission !== "granted") {
-        Notification.requestPermission();
-      }
+      //if (Notification.permission !== "granted") {
+        
+        Notification.requestPermission(function(result) {
+          if (result === 'granted') {
+            navigator.serviceWorker.ready.then(function(registration) {
+              registration.showNotification('Notification with ServiceWorker');
+            });
+          }
+        });
+
+      //}
       var title = "Horarios";
       //var title = "";
 
