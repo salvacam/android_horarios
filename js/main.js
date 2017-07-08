@@ -158,9 +158,7 @@ var app = {
               registration.showNotification(title, {  
                 body: body,
                 icon: icon,
-                tag: tag,
-                badge: 'img/icon-144x144.png',
-                timestamp: 360370800000
+                tag: tag
               });
             });
           }
