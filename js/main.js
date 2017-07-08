@@ -161,25 +161,6 @@ var app = {
         }
       });
     }
-      /*
-      var title = "Horarios";
-      //var title = "";
-
-      var extra = {
-        icon: "img/icon-48x48.png",
-        tag: "bus",
-        body: "Acercandose la linea " + line
-      };
-
-      var noti = new Notification( title, extra);
-
-      noti.onclick = function(event) {
-        event.preventDefault();
-        noti.close();
-      };
-
-      setTimeout( function() { noti.close(); }, 10000)};
-      */
   },
 
   fn_errorXHR: function() {
