@@ -121,6 +121,14 @@ var app = {
         if (xhr.status == 200) {
           var data = JSON.parse(xhr.responseText);
           app.renderResult(data, numparada);
+
+          //TODO crear array y asignar todos los timeout de cada linea por llegar
+          // si se hace otra llamada eliminar todos los timeout
+          data.forEach(function(item) {
+            setTimeout(function() {app.prueba_notificacion(item.linea);}, (item.tiempo-1) * 60 * 1000);
+          });
+          // end TODO
+
         } else {
           app.fn_errorXHR();
         }
@@ -132,6 +140,30 @@ var app = {
     }catch(err){
       app.fn_errorXHR();
     }
+  },
+
+  prueba_notificacion: function(line) {
+    if (Notification) {
+      if (Notification.permission !== "granted") {
+        Notification.requestPermission();
+      }
+      var title = "Horarios";
+      //var title = "";
+
+      var extra = {
+        icon: "img/icon-48x48.png",
+        tag: "bus",
+        body: "Acercandose la linea " + line
+      };
+
+      var noti = new Notification( title, extra);
+
+      noti.onclick = function(event) {
+        event.preventDefault();
+        noti.close();
+      };
+
+      setTimeout( function() { noti.close(); }, 10000)};
   },
 
   fn_errorXHR: function() {
