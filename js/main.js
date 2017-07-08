@@ -122,8 +122,11 @@ var app = {
         if (xhr.status == 200) {
           var data = JSON.parse(xhr.responseText);
           app.renderResult(data, numparada);
-          app.timeOuts = [];
 
+          for (var i=0; i<app.timeOuts.length; i++) {
+            clearTimeout(app.timeOuts[i]);
+          }
+          app.timeOuts = [];
           //TODO crear array y asignar todos los timeout de cada linea por llegar
           // si se hace otra llamada eliminar todos los timeout
           if (!data.error) {
