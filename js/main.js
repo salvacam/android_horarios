@@ -156,9 +156,9 @@ var app = {
       Notification.requestPermission(function(result) {
         if (result === 'granted') {
           navigator.serviceWorker.ready.then(function(registration) {
-            var title = "Horarios";
+            var title = "Parada " + busStop;
             var options = {
-              body: "Parada " + busStop + ". Acercandose la linea " + line,
+              body:  "Acercandose la linea " + line,
               icon: "img/icon-48x48.png",
               tag:  "horarioBus"
             };
