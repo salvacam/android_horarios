@@ -146,25 +146,20 @@ var app = {
     if (Notification) {
       if (Notification.permission !== "granted") {
         Notification.requestPermission();
-      } else {                
-        Notification.requestPermission(function(result) {
-          if (result === 'granted') {
-            navigator.serviceWorker.ready.then(function(registration) {              
-              var title = "Horarios";
-              var body = "Acercandose la linea " + line;
-              var icon = "img/icon-48x48.png";
-              var tag =  "bus";
-              //registration.showNotification('Notification with ServiceWorker');
-              registration.showNotification(title, {  
-                body: body,
-                icon: icon,
-                tag: tag,
-                timestamp: Date.parse('01 Jan 2000 00:00:00')
-              });
-            });
-          }
-        });
       }
+      Notification.requestPermission(function(result) {
+        if (result === 'granted') {
+          navigator.serviceWorker.ready.then(function(registration) {              
+            var options = {
+              title: "Horarios",
+              body: "Acercandose la linea " + line,
+              icon: "img/icon-48x48.png",
+              tag:  "bus"
+            };
+            registration.showNotification(title, options);              
+          });
+        }
+      });
     }
       /*
       var title = "Horarios";
