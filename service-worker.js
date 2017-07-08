@@ -61,15 +61,12 @@ self.addEventListener('fetch', function(event) {
 
 self.addEventListener('notificationclick', function(event) {
   event.notification.close();
-  event.waitUntil(self.clients.openWindow('http://127.0.0.1:1234/'));
-
-  //... Do your stuff here.
 });
-
+/*
 self.addEventListener('notificationclose', function(event) {
-  //... Do your stuff here.
+  
 });
-
+*/
 /*
 self.addEventListener('fetch', function(e) {
   console.log('[ServiceWorker] Fetch', e.request.url);
