@@ -12,6 +12,7 @@ var app = {
   guardar: document.getElementById('guardar'),
 
   todasParadas: [],
+  timeOuts: [],
   ordenNuevo: 0,
   ordenInicio: 0,
   tiempoAnimacion: 750,
@@ -121,11 +122,16 @@ var app = {
         if (xhr.status == 200) {
           var data = JSON.parse(xhr.responseText);
           app.renderResult(data, numparada);
+          app.timeOuts = [];
 
           //TODO crear array y asignar todos los timeout de cada linea por llegar
           // si se hace otra llamada eliminar todos los timeout
           data.forEach(function(item) {
-            setTimeout(function() {app.prueba_notificacion(item.linea);}, (item.tiempo-1) * 60 * 1000);
+            app.timeOuts.push(
+              setTimeout(function() {
+                app.showNotification(item.linea, numparada);
+              }, (item.tiempo-1) * 60 * 1000)
+            );            
           });
           // end TODO
 
@@ -142,7 +148,7 @@ var app = {
     }
   },
 
-  prueba_notificacion: function(line) {
+  showNotification: function(line, busStop) {
     if (Notification) {
       if (Notification.permission !== "granted") {
         Notification.requestPermission();
@@ -152,9 +158,9 @@ var app = {
           navigator.serviceWorker.ready.then(function(registration) {
             var title = "Horarios";
             var options = {
-              body: "Acercandose la linea " + line,
+              body: "Parada " + busStop + ". Acercandose la linea " + line,
               icon: "img/icon-48x48.png",
-              tag:  "bus"
+              tag:  "horarioBus"
             };
             registration.showNotification(title, options);              
           });
