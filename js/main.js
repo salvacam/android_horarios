@@ -98,7 +98,9 @@ var app = {
   mostrar: function() {
     var numparada = document.getElementById("parada").value;
     if (numparada === "") {
-      alertify.alert("Debes introducir un número de parada");
+      alertify
+        .okBtn("OK")
+        .alert("Debes introducir un número de parada");
       return;
     }
 
@@ -115,15 +117,20 @@ var app = {
 
     var url = app.URL_SERVER + numparada;
 
-    var xhr = new XMLHttpRequest();
+    fetch(url)
+    .then(
+      function(response) {
+        if (response.status !== 200) {
+          console.log('Looks like there was a problem. Status Code: ' + response.status);  
+          app.fn_errorXHR();
+          return;
+        }
 
-    xhr.open ("GET", url, true);
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState == 4) {
-        if (xhr.status == 200) {
-          var data = JSON.parse(xhr.responseText);
+        // Examine the text in the response  
+        response.json()
+        .then(function(data) {
           app.renderResult(data, numparada);
-          
+              
           // Delete old notifications
           for (var i=0; i<app.timeOuts.length; i++) {
             clearTimeout(app.timeOuts[i]);
@@ -137,21 +144,17 @@ var app = {
                 setTimeout(function() {
                   app.showNotification(item.linea, numparada);
                 }, (item.tiempo-1) * 60 * 1000)
-              );            
+              );
             });
           }
 
-        } else {
-          app.fn_errorXHR();
-        }
+        })
       }
-    };
-
-    try{
-      xhr.send(null);
-    }catch(err){
+    )
+    .catch(function(err) {
+      console.log('Fetch Error :-S', err);
       app.fn_errorXHR();
-    }
+    });
   },
 
   showNotification: function(line, busStop) {
@@ -176,7 +179,9 @@ var app = {
   },
 
   fn_errorXHR: function() {
-    alertify.alert("Error al obtener los datos, compruebe su conexión");
+    alertify
+      .okBtn("OK")
+      .alert("Error al obtener los datos, compruebe su conexión");
 
     app.botonConsulta.classList.toggle('disabled');
     app.botonConsulta.addEventListener('click', app.mostrar);
@@ -253,25 +258,37 @@ var app = {
     var numparada = document.getElementById("parada").value;
 
     if (!numparada || numparada === "") {
-      alertify.alert("Debes introducir un número de parada");
+      alertify
+        .okBtn("OK")
+        .alert("Debes introducir un número de parada");
       return;
     }
 
     for (var i in app.todasParadas) {
         if(app.todasParadas[i].Number === numparada) {
-            alertify.alert("Ya tienes la parada " + numparada + " guardada con la descripción \"" + app.todasParadas[i].Descripcion +"\"");
+            alertify
+              .okBtn("OK")
+              .alert("Ya tienes la parada " + numparada + " guardada con la descripción \"" + app.todasParadas[i].Descripcion +"\"");
             return;
         }
     }
 
-
     alertify
-      .defaultValue("Descripcion de la parada")
+    //  .defaultValue("Descripcion de la parada")
       .okBtn("Guardar")
       .cancelBtn("Cancelar")
+      .placeholder('Descripcion de la parada')
       .prompt("Descripcion para la parada " + numparada +", máximo 20 caracteres",
         function (val, ev) {
+
           ev.preventDefault();
+          
+          if (val === "") {
+            alertify
+              .okBtn("OK")
+              .alert("Debes introducir una descripción de la parada");      
+            return;
+          }
 
           var item = {Order: app.ordenNuevo + 1, Number: numparada, Descripcion: val};
 
