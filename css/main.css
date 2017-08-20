@@ -141,3 +141,69 @@ body {
     margin-left: 100%;
   }
 }
+
+/******************* CONFIGURACIÓN Notificaciones *********************/
+
+.notification-enable {
+  display: flex;
+  align-items: center;
+    
+  width: 325px;
+  margin-left: -15px;
+  margin-bottom: 10px;
+
+  padding-left: 10px;
+  padding-bottom: 10px;
+  
+  font-size: 20px;
+  text-transform: uppercase;
+}
+  
+.checkbox-android {
+  top: -0.125rem;
+  position: relative;
+  margin: 0 1.5rem 0 0;
+  cursor: pointer;
+}
+
+.checkbox-android + label {
+  display: block;
+  margin-top: 5px; 
+  cursor: pointer;
+}
+
+.checkbox-android:before {
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+  content: "";
+  position: absolute;
+  left: 0.075rem;
+  z-index: 1;
+  width: 2rem;
+  height: 2rem;
+  border: 2px solid #f2f2f2;
+}
+
+.checkbox-android:checked:before {
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+  height: .5rem;
+  border-color: #009688;
+  border-top-style: none;
+  border-right-style: none;
+}
+
+.checkbox-android:after {
+  content: "";
+  position: absolute;
+  top: -0.125rem;
+  left: 0;
+  width: 2.2rem;
+  height: 2.2rem;
+  background: #fff;
+  cursor: pointer;
+}

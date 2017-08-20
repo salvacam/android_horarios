@@ -17,6 +17,7 @@ var app = {
   ordenNuevo: 0,
   ordenInicio: 0,
   tiempoAnimacion: 750,
+  notifictionEnable: true,
   configradorDiv: document.getElementById('configradorDiv'),
   principalDiv: document.getElementById('principalDiv'),
 
@@ -29,7 +30,8 @@ var app = {
   tablaResultado: document.getElementById('tablaResultado'),
   cabeceraTabla: document.getElementById('cabeceraTabla').classList,
   botonesFavoritos: document.querySelector('.parada'),
-
+  
+  notification: document.getElementById('notification'),
 
   inicio: function() {
 
@@ -46,6 +48,17 @@ var app = {
       app.getAllBusStopOrder();
       app.mostrarFavoritos();
     }
+
+    //Permitir notificaciones
+    if(localStorage.getItem('_horarios_notificaciones')) {
+      app.notifictionEnable = JSON.parse(localStorage.getItem('_horarios_notificaciones')); 
+      if(!app.notifictionEnable) {      
+        app.notifictionEnable = false;
+        app.notification.removeAttribute('checked');
+      }      
+    }
+
+    app.notification.addEventListener('change', app.updateEnableNotification);
 
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker
@@ -68,6 +81,16 @@ var app = {
       app.todasParadas.sort(compare);
       app.ordenNuevo = app.todasParadas[app.todasParadas.length - 1].Order;
       app.ordenInicio = app.todasParadas[0].Order;
+  },
+
+  updateEnableNotification: function () {
+    if (app.notification.checked) {
+      app.notifictionEnable = true;
+    } else {
+      app.notifictionEnable = false;
+    }
+
+    localStorage.setItem('_horarios_notificaciones', JSON.stringify(app.notifictionEnable));
   },
 
   showMenu: function() {
@@ -158,7 +181,7 @@ var app = {
   },
 
   showNotification: function(line, busStop) {
-    if (Notification) {
+    if (app.notifictionEnable && Notification) {
       if (Notification.permission !== "granted") {
         Notification.requestPermission();
       }
@@ -397,10 +420,10 @@ var app = {
       app.mostrarFavoritos();
   },
 
-  mostrarFavoritos: function(){
+  mostrarFavoritos: function() {
     app.getAllBusStopOrder();
     var listaFavoritos = document.getElementById('lista-favoritos');
-    var listaConfigurador = document.getElementById('configradorDiv');
+    var listaConfigurador = document.querySelector('#configradorDiv #list');
 
 
     //TODO crear function
@@ -495,6 +518,6 @@ var app = {
 
       iconoBorrarTodo.addEventListener('click', app.deleteBookmark);
     }
-
+  
   }
 };
