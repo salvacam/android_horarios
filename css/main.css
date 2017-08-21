@@ -148,14 +148,14 @@ body {
   display: flex;
   align-items: center;
     
-  width: 325px;
+  width: 295px;
   margin-left: -15px;
   margin-bottom: 10px;
 
   padding-left: 10px;
   padding-bottom: 10px;
   
-  font-size: 20px;
+  font-size: 18px;
   text-transform: uppercase;
 }
   
