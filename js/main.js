@@ -30,6 +30,9 @@ var app = {
   tablaResultado: document.getElementById('tablaResultado'),
   cabeceraTabla: document.getElementById('cabeceraTabla').classList,
   botonesFavoritos: document.querySelector('.parada'),
+
+  infoButton: document.getElementById('infoButton'),
+  responsibility: document.getElementById('responsibility'),
   
   notification: document.getElementById('notification'),
 
@@ -40,6 +43,8 @@ var app = {
     app.botonAdd.addEventListener('click', app.addBookmark);
 
     app.botonMenu.addEventListener('click', app.showMenu);
+
+    app.infoButton.addEventListener('click', app.showInfo);    
 
     app.configradorDiv.style.minHeight = (window.innerHeight - 46)+"px";
 
@@ -110,6 +115,16 @@ var app = {
         app.botonMenu.classList.remove('fa-bars');
         app.botonMenu.classList.add('fa-arrow-right');
         app.principalDiv.classList.add('hide');
+    }
+  },
+
+  showInfo: function() {
+    if (app.responsibility.classList.contains('hidden')) {
+      app.responsibility.classList.remove('hidden');
+      app.infoButton.textContent = 'Ocultar Información';
+    } else {
+      app.responsibility.classList.add('hidden');
+      app.infoButton.textContent = 'Ver Información';
     }
   },
 

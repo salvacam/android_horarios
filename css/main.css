@@ -6,7 +6,7 @@ body {
 
 header {
     position: fixed;
-    z-index: 1;
+    z-index: 2;
 }
 
 header h3 {
@@ -96,6 +96,21 @@ body span.parada {
 /******************* CONFIGURACIÓN *********************/
 body {
     overflow-x: hidden;
+}
+
+#infoButton {
+  font-size: 1.2em;
+  background-color: #fff;
+  margin-left: -15px;
+}
+
+#infoButton:hover,
+#infoButton:active:hover {
+  margin-left: -15px;
+}
+
+.infoText {
+
 }
 
 #configradorDiv {
