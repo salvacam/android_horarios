@@ -38,6 +38,10 @@ header h3 {
   height: 40px;
 }
 
+.labelHide {
+  font-size: 0px;
+}
+
 #botonConsulta, #botonAdd {
   margin-top: -4px;
   margin-left: 10px;
