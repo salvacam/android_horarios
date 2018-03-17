@@ -36,6 +36,7 @@ header h3 {
 #parada {
   width: 115px;
   height: 40px;
+  margin-left: 5px;
 }
 
 .labelHide {
