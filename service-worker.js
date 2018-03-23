@@ -1,25 +1,25 @@
 var cacheName = 'horarios-v1.1.02';
 
 var filesToCache = [
-  '/',
-  'index.html',
-  'js/main.min.js',
-  'css/style.min.css',
+  './',
+  './index.html',
+  './js/main.min.js',
+  './css/style.min.css',
 
-  'fonts/fontawesome-webfont.woff2?v=4.7.0',
-  'fonts/fontawesome-webfont.woff?v=4.7.0',
-  'fonts/fontawesome-webfont.ttf?v=4.7.0',
-  'fonts/fontawesome-webfont.svg?v=4.7.0',
-  'fonts/fontawesome-webfont.eot?v=4.7.0',
+  './fonts/fontawesome-webfont.woff2?v=4.7.0',
+  './fonts/fontawesome-webfont.woff?v=4.7.0',
+  './fonts/fontawesome-webfont.ttf?v=4.7.0',
+  './fonts/fontawesome-webfont.svg?v=4.7.0',
+  './fonts/fontawesome-webfont.eot?v=4.7.0',
 
-  'fonts/FontAwesome.otf',
-  'fonts/fontawesome-webfont.eot',
-  'fonts/fontawesome-webfont.svg',
-  'fonts/fontawesome-webfont.ttf',
-  'fonts/fontawesome-webfont.woff',
-  'fonts/fontawesome-webfont.woff2',
+  './fonts/FontAwesome.otf',
+  './fonts/fontawesome-webfont.eot',
+  './fonts/fontawesome-webfont.svg',
+  './fonts/fontawesome-webfont.ttf',
+  './fonts/fontawesome-webfont.woff',
+  './fonts/fontawesome-webfont.woff2',
   
-  'img/icon.png'
+  './img/icon.png'
 ];
 
 self.addEventListener('install', function(e) {
