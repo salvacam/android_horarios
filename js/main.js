@@ -6,9 +6,9 @@ var app = {
 
   //URL_SERVER: 'index.php?parada=',
   //URL_SERVER: 'http://transportesrober.com:9055/websae/Transportes/parada.aspx?idparada=',
-  //URL_SERVER: 'https://calcicolous-moonlig.000webhostapp.com/horarios/index.php?parada=',
+  URL_SERVER: 'https://calcicolous-moonlig.000webhostapp.com/horarios/index.php?parada=',
   //URL_SERVER: 'https://calcicolous-moonlig.000webhostapp.com/horarios/index_mock.php?parada=',
-  URL_SERVER: 'https://horario-bus.herokuapp.com/?parada=',
+  //URL_SERVER: 'https://horario-bus.herokuapp.com/?parada=',
 
   cancelar: document.getElementById('cancelar'),
   guardar: document.getElementById('guardar'),
