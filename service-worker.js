@@ -1,4 +1,4 @@
-var cacheName = 'horarios-v1.1.03';
+var cacheName = 'horarios-v1.1.04';
 
 var filesToCache = [
   './',
@@ -47,7 +47,7 @@ self.addEventListener('activate', function(e) {
     })
   );
 });
-
+/*
 self.addEventListener('fetch', function(event) {
   event.respondWith(caches.match(event.request).then(function(response){
       if(response)
@@ -57,7 +57,19 @@ self.addEventListener('fetch', function(event) {
       });
   }));
 });
-
+*/
+self.addEventListener('fetch', function(event) {
+    event.respondWith(
+        caches.match(event.request)
+        .then(function(response) {
+            // Cache hit - return response
+            if (response) {
+                return response;
+            }
+            return fetch(event.request);
+        })
+    );
+});
 
 self.addEventListener('notificationclick', function(event) {
   event.notification.close();
