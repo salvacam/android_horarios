@@ -1,5 +1,7 @@
+.DS_Store
 nbproject/*
-.saas-cache/*
+.sass-cache/*
 _index.php
-css/.saas-cache/*
+css/.sass-cache/*
+css/scss/font-awesome.css.map
 node_modules/*

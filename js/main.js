@@ -207,6 +207,7 @@ var app = {
             var title = "Parada " + busStop;
             var options = {
               body:  "Acercandose la linea " + line,
+              badge: "img/icon-48x48.png",
               icon: "img/icon-48x48.png",
               tag:  "horarioBus"
             };
