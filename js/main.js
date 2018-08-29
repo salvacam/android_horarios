@@ -33,6 +33,8 @@ var app = {
   botonesFavoritos: document.querySelector('.parada'),
 
   infoButton: document.getElementById('infoButton'),
+  importButton: document.getElementById('importButton'),
+  inputFile: document.getElementById('inputFile'),
   responsibility: document.getElementById('responsibility'),
   
   notification: document.getElementById('notification'),
@@ -45,7 +47,9 @@ var app = {
 
     app.botonMenu.addEventListener('click', app.showMenu);
 
-    app.infoButton.addEventListener('click', app.showInfo);    
+    app.infoButton.addEventListener('click', app.showInfo);
+
+    app.importButton.addEventListener('click', app.importFile);    
 
     app.configradorDiv.style.minHeight = (window.innerHeight - 46)+"px";
 
@@ -76,6 +80,7 @@ var app = {
   },
 
   getAllBusStopOrder: function(){
+    if(localStorage.getItem('_horarios_paradas')) {
       app.todasParadas = JSON.parse(localStorage.getItem('_horarios_paradas'));
       function compare(a,b) {
         if (a.Order < b.Order)
@@ -87,6 +92,7 @@ var app = {
       app.todasParadas.sort(compare);
       app.ordenNuevo = app.todasParadas[app.todasParadas.length - 1].Order;
       app.ordenInicio = app.todasParadas[0].Order;
+    }
   },
 
   updateEnableNotification: function () {
@@ -390,6 +396,94 @@ var app = {
       );
   },
 
+  importFile: function(e) {
+    alertify
+      .okBtn("Importar")
+      .cancelBtn("Cancelar")
+      .confirm("¿Importar paradas?", function (ev) {
+          ev.preventDefault();
+
+          app.inputFile.click();
+          app.inputFile.addEventListener('change',function(e) {
+            var input = e.target;
+            var reader = new FileReader();
+            reader.onload = function(){
+              var text = reader.result;
+              localStorage.setItem('_horarios_paradas', app.csvJSON(reader.result));
+              app.mostrarFavoritos();
+            };
+            reader.readAsText(input.files[0]);
+            app.inputFile.removeEventListener('change', function(){});
+            app.inputFile.value = "";
+          });
+      });
+  },
+
+  csvJSON: function(csv){
+    var lines=csv.split("\r\n");
+
+    var result = [];
+
+    var headersCSV = ["Order","Number","Descripcion"]; // TODO comprobar el tipo de dato que viene en cada campo
+
+    for(var i=0;i<lines.length;i++){
+
+      var obj = {};
+      var currentline=lines[i].split(",");
+
+      if (currentline.length > 1) {
+        for(var j=0;j<headersCSV.length;j++){
+          obj[headersCSV[j]] = currentline[j];
+        }
+
+        result.push(obj);
+      }
+
+    }
+    
+    return JSON.stringify(result);
+  },
+
+  DownloadJSON2CSV: function(objArray) {
+      var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+
+      var str = '';
+
+      for (var i = 0; i < array.length; i++) {
+        var line = '';
+
+        for (var index in array[i]) {
+          line += array[i][index] + ',';
+        }
+
+        line.slice(0, line.Length - 1);
+
+        str += line + '\r\n';
+      }
+      return str;
+    },
+
+  exportBookmark: function() {   
+    var text = app.DownloadJSON2CSV(localStorage.getItem('_horarios_paradas')); 
+    var jsonArray = app.csvJSON(text);
+    var m = new Date();
+    var dateString = m.getUTCFullYear() +"-"+ (m.getUTCMonth()+1) +"-"+ m.getUTCDate(); 
+    var filename = "horarios_paradas_" + dateString + ".csv";
+
+    var pom = document.createElement('a');
+    pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    pom.setAttribute('download', filename);
+
+    if (document.createEvent) {
+        var event = document.createEvent('MouseEvents');
+        event.initEvent('click', true, true);
+        pom.dispatchEvent(event);
+    }
+    else {
+        pom.click();
+    }
+  },
+
   deleteBookmark: function() {
     alertify
       .okBtn("Borrar")
@@ -530,10 +624,24 @@ var app = {
       var iconoBorrarTodoTexto = document.createElement('span');
       iconoBorrarTodoTexto.textContent = ' BORRAR TODAS';
       iconoBorrarTodo.appendChild(iconoBorrarTodoTexto);
-
+      
       listaConfigurador.appendChild(iconoBorrarTodo);
 
       iconoBorrarTodo.addEventListener('click', app.deleteBookmark);
+
+      var iconoExportarCSV = document.createElement('i');
+      iconoExportarCSV.className = "fa fa-download btn btn-default fa-2x";
+      iconoExportarCSV.setAttribute('aria-hidden', true);
+      iconoExportarCSV.setAttribute('id', 'export');
+
+      var iconoExportarCSVTexto = document.createElement('span');
+      iconoExportarCSVTexto.textContent = ' Exportar';
+      iconoExportarCSV.appendChild(iconoExportarCSVTexto);
+
+      listaConfigurador.appendChild(iconoExportarCSV);      
+
+      iconoExportarCSV.addEventListener('click', app.exportBookmark);
+      
     }
   
   }

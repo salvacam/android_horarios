@@ -118,8 +118,8 @@ body {
   margin-left: -15px;
 }
 
-.infoText {
-
+#responsibility.infoText {
+  float: left;
 }
 
 #configradorDiv {
@@ -142,6 +142,20 @@ body {
     margin-left: 0%;
 }
 
+  #configradorDiv.swipe-izquierda #export, 
+  #configradorDiv.swipe-izquierda #importButton,
+  #configradorDiv.swipe-izquierda #infoButton { 
+    float: left;    
+    clear: both;
+    margin-bottom: 10px;
+  }
+
+
+  #configradorDiv.swipe-izquierda #export, 
+  #configradorDiv.swipe-izquierda #importButton { 
+    margin-left: -15px;
+    font-size: 18px;
+  }
 
 #configradorDiv.swipe-derecha{
     -webkit-animation: swipe-derecha 0.75s 1;          
